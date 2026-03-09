@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>美团外卖红包</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+            min-height: 100vh;
+            background-color: #FFD700;
+        }
+        .container { max-width: 420px; margin: 0 auto; padding: 0 15px 20px; }
+
+        /* 顶部栏 */
+        .header { padding: 15px 0 0; display: flex; justify-content: center; align-items: center; }
+        .header-container { display: flex; align-items: center; gap: 8px; }
+        .logo-image { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; }
+        .logo-text { font-size: 24px; font-weight: bold; }
+
+        /* 轮播图 */
+        .swiper-container { width: 100%; height: 180px; border-radius: 15px; margin: 15px 0 20px; overflow: hidden; position: relative; }
+        .swiper-wrapper { width: 100%; height: 100%; display: flex; transition: transform 0.5s ease; }
+        .swiper-slide { flex: 0 0 100%; height: 100%; background-size: cover; background-position: center; position: relative; cursor: pointer; }
+        .slide-content { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.7)); color: white; padding: 15px; }
+        .slide-title { font-size: 20px; font-weight: bold; margin-bottom: 5px; }
+        .slide-subtitle { font-size: 14px; opacity: 0.9; }
+        .swiper-pagination { position: absolute; bottom: 10px; right: 15px; display: flex; gap: 6px; }
+        .swiper-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.5); transition: all 0.3s; }
+        .swiper-dot.active { background: white; transform: scale(1.2); }
+
+        /* 步骤 */
+        .steps-section { margin: 0 0 20px; }
+        .steps-image { width: 100%; height: 80px; border-radius: 15px; object-fit: cover; display: block; margin: 0 auto; }
+        .steps-text { width: 100%; height: 80px; display: flex; align-items: center; justify-content: center; color: #FF6B00; font-size: 24px; font-weight: bold; margin: 0 auto; text-align: center; border-radius: 15px; }
+
+        /* 按钮 */
+        .buttons-section { margin-bottom: 20px; }
+        .main-button { display: block; width: 100%; background: linear-gradient(135deg, #FF6B00, #FF9800); border: none; border-radius: 15px; padding: 22px 20px; color: white; font-size: 22px; font-weight: bold; text-align: center; margin-bottom: 15px; box-shadow: 0 8px 25px rgba(255,107,0,0.3); cursor: pointer; transition: all 0.2s ease; }
+        .main-button:active { transform: translateY(2px); box-shadow: 0 4px 15px rgba(255,107,0,0.3); }
+        .sub-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .sub-button { background: white; border-radius: 12px; padding: 18px 10px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); cursor: pointer; transition: all 0.2s ease; border: none; }
+        .sub-button:active { transform: translateY(1px); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .sub-button-title { font-size: 16px; font-weight: bold; margin-bottom: 5px; }
+        .sub-button-desc { font-size: 12px; color: #666; }
+
+        /* 图片按钮 */
+        .image-buttons-section { margin-bottom: 20px; }
+        .image-buttons-title { font-size: 18px; font-weight: bold; color: #333; margin-bottom: 15px; padding-left: 8px; position: relative; }
+        .image-buttons-title::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 4px; height: 16px; background: #FF6B00; border-radius: 2px; }
+        .image-buttons-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+        .image-button { height: 100px; border-radius: 10px; background-size: cover; background-position: center; position: relative; overflow: hidden; cursor: pointer; }
+        .image-button-overlay { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.5); padding: 8px; text-align: center; }
+        .image-button-text { color: white; font-size: 12px; font-weight: bold; }
+
+        /* 注意事项 */
+        .tips-section { background: white; border-radius: 15px; padding: 20px 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .tips-title { font-size: 18px; font-weight: bold; color: #333; margin-bottom: 15px; padding-left: 8px; position: relative; }
+        .tips-title::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 4px; height: 16px; background: #FF6B00; border-radius: 2px; }
+        .tips-content { font-size: 14px; color: #666; line-height: 1.6; white-space: pre-line; }
+        .safe-area { height: 20px; }
+
+        /* 加载 */
+        .loading { display: flex; justify-content: center; align-items: center; padding: 40px; color: #666; }
+        .loading-spinner { width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #FF6B00; border-radius: 50%; animation: spin 1s linear infinite; margin-right: 15px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div class="container" id="pageContainer">
+        <div class="loading">
+            <div class="loading-spinner"></div>
+            <span>加载配置中...</span>
+        </div>
+    </div>
+
+    <script>
+        // ⚠️ 【GitHub 配置区域】请修改为你的 GitHub 信息
+        const GITHUB_CONFIG = {
+            enabled: true,
+            username: '18033150689',
+            repo: 'meituan-coupon-config',
+            branch: 'main',
+            path: 'config.js'
+        };
+
+        if (GITHUB_CONFIG.enabled) {
+            localStorage.setItem('siteGitHubConfig', JSON.stringify({
+                username: GITHUB_CONFIG.username,
+                repo: GITHUB_CONFIG.repo,
+                branch: GITHUB_CONFIG.branch,
+                path: GITHUB_CONFIG.path
+            }));
+        }
+
+        const CONFIG_LOADER = {
+            loadFromGitHub: async function() {
+                const githubConfig = localStorage.getItem('siteGitHubConfig');
+                if (!githubConfig) return null;
+                try {
+                    const cfg = JSON.parse(githubConfig);
+                    const url = `https://raw.githubusercontent.com/${cfg.username}/${cfg.repo}/${cfg.branch}/${cfg.path}`;
+                    const response = await fetch(url);
+                    if (response.ok) {
+                        const content = await response.text();
+                        // 匹配 const siteConfig = {...}; 支持多行
+                        const match = content.match(/const\s+siteConfig\s*=\s*(\{[\s\S]*\})\s*;/);
+                        if (match) return JSON.parse(match[1]);
+                    }
+                } catch (error) {
+                    console.error('从 GitHub 加载配置失败:', error);
+                }
+                return null;
+            },
+            loadFromLocal: function() {
+                if (typeof siteConfig !== 'undefined') return siteConfig;
+                return null;
+            }
+        };
+    </script>
+
+    <script src="config.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            let config = null;
+
+            const githubConfig = await CONFIG_LOADER.loadFromGitHub();
+            if (githubConfig) {
+                config = githubConfig;
+                console.log('已从 GitHub 加载配置');
+            }
+
+            if (!config) {
+                config = CONFIG_LOADER.loadFromLocal();
+                if (config) console.log('已从本地 config.js 加载配置');
+            }
+
+            if (!config) {
+                console.log('配置加载失败，使用默认配置');
+                config = getDefaultConfig();
+            }
+
+            initPage(config);
+        });
+
+        // ========================
+        // 构建跳转链接
+        // ========================
+        function buildHref(btnConfig, redirectBaseUrl) {
+            if (!btnConfig) return '#';
+            const linkType = btnConfig.linkType || 'normal';
+            if (linkType === 'miniprogram') {
+                const mpLink = btnConfig.mpLink || '';
+                if (!mpLink) return '#';
+                // 直接返回 mp:// 链接，在微信内通过 location.href 跳转
+                return mpLink;
+            }
+            return btnConfig.link || '#';
+        }
+
+        // 判断是否在微信环境
+        function isWeixinBrowser() {
+            return /MicroMessenger/i.test(navigator.userAgent);
+        }
+
+        // ========================
+        // 初始化页面
+        // ========================
+        function initPage(config) {
+            const container = document.getElementById('pageContainer');
+            document.title = config.siteTitle || "美团外卖红包";
+            document.body.style.backgroundColor = config.bgColor || "#FFD700";
+
+            const redirectBase = config.redirectBaseUrl || '';
+
+            container.innerHTML = `
+                ${config.header && config.header.enabled ? generateHeaderHTML(config.header) : ''}
+
+                <div class="swiper-container" id="swiperContainer">
+                    <div class="swiper-wrapper" id="swiperWrapper">
+                        ${generateCarouselHTML(config.carousel || [])}
+                    </div>
+                    <div class="swiper-pagination" id="swiperPagination">
+                        ${generateCarouselDots(config.carousel || [])}
+                    </div>
+                </div>
+
+                <div class="steps-section">
+                    ${generateStepsHTML(config)}
+                </div>
+
+                <div class="buttons-section">
+                    ${generateMainButtonHTML(config.mainButton, redirectBase)}
+                    ${config.subButtonsEnabled !== false ? generateSubButtonsHTML(config.subButtons, redirectBase) : ''}
+                </div>
+
+                ${config.imageButtonsEnabled !== false ? `
+                <div class="image-buttons-section">
+                    <div class="image-buttons-title">热门活动</div>
+                    <div class="image-buttons-grid">
+                        ${generateImageButtonsHTML(config.imageButtons || [], redirectBase)}
+                    </div>
+                </div>` : ''}
+
+                <div class="tips-section">
+                    <div class="tips-title">注意事项</div>
+                    <div class="tips-content">${generateTipsHTML(config.tips || [])}</div>
+                </div>
+
+                <div class="safe-area"></div>
+            `;
+
+            initCarousel(config.carousel || []);
+            initButtonClickEvents();
+        }
+
+        function generateHeaderHTML(headerConfig) {
+            if (!headerConfig.enabled) return '';
+            const hasLogo = headerConfig.logoUrl && headerConfig.logoUrl.trim() !== '';
+            const hasText = headerConfig.text && headerConfig.text.trim() !== '';
+            if (!hasLogo && !hasText) return '';
+
+            let logoHTML = hasLogo ? `<img src="${headerConfig.logoUrl}" class="logo-image" alt="Logo" style="width: ${headerConfig.logoSize || '40px'}; height: ${headerConfig.logoSize || '40px'};">` : '';
+            let textHTML = hasText ? `<div class="logo-text" style="color: ${headerConfig.textColor || '#FF6B00'}; font-size: ${headerConfig.fontSize || '24px'}; font-weight: ${headerConfig.fontWeight || 'bold'};">${headerConfig.text}</div>` : '';
+
+            return `
+                <div class="header">
+                    <div class="header-container" style="justify-content: ${headerConfig.align || 'center'}">
+                        ${headerConfig.logoPosition === 'right' ? textHTML + logoHTML : logoHTML + textHTML}
+                    </div>
+                </div>`;
+        }
+
+        function generateCarouselHTML(carouselItems) {
+            if (!carouselItems || carouselItems.length === 0) {
+                return `<div class="swiper-slide" style="background: linear-gradient(135deg, #FF6B6B, #FF8E53);" onclick="window.open('https://meituan.com', '_blank')">
+                    <div class="slide-content"><div class="slide-title">美团外卖红包</div><div class="slide-subtitle">每日领取优惠券</div></div></div>`;
+            }
+            return carouselItems.map(item => `
+                <div class="swiper-slide" style="background-image: url('${item.image || ""}');"
+                     data-link="${item.link || "https://meituan.com"}">
+                    <div class="slide-content">
+                        <div class="slide-title">${item.title || "美团优惠"}</div>
+                        <div class="slide-subtitle">${item.subtitle || "点击领取"}</div>
+                    </div>
+                </div>`).join('');
+        }
+
+        function generateCarouselDots(carouselItems) {
+            const count = Math.max(1, carouselItems.length);
+            let dots = '';
+            for (let i = 0; i < count; i++) dots += `<div class="swiper-dot ${i === 0 ? 'active' : ''}" data-index="${i}"></div>`;
+            return dots;
+        }
+
+        function generateStepsHTML(config) {
+            if (config.stepsType === 'image' && config.stepsImage) {
+                return `<img src="${config.stepsImage}" class="steps-image" alt="领券步骤">`;
+            }
+            return `<div class="steps-text" style="color: ${config.stepsColor || '#FF6B00'}">${config.stepsText || "先领券 → 再下单 → 享优惠"}</div>`;
+        }
+
+        function generateMainButtonHTML(mainButton, redirectBase) {
+            if (!mainButton || !mainButton.text) return '';
+            const href = buildHref(mainButton, redirectBase);
+            return `
+                <button class="main-button"
+                        style="background: ${mainButton.color || 'linear-gradient(135deg, #FF6B00, #FF9800)'}; color: ${mainButton.textColor || '#FFFFFF'};"
+                        data-href="${href}">
+                    ${mainButton.text}
+                </button>`;
+        }
+
+        function generateSubButtonsHTML(subButtons, redirectBase) {
+            if (!subButtons || !subButtons.button1) return '';
+            const href1 = buildHref(subButtons.button1, redirectBase);
+            const href2 = buildHref(subButtons.button2, redirectBase);
+            return `
+                <div class="sub-buttons">
+                    <button class="sub-button" data-href="${href1}">
+                        <div class="sub-button-title">${subButtons.button1.text || "品质会场(新)"}</div>
+                        <div class="sub-button-desc">${subButtons.button1.desc || "精选商家5折起"}</div>
+                    </button>
+                    <button class="sub-button" data-href="${href2}">
+                        <div class="sub-button-title">${subButtons.button2.text || "超值券包"}</div>
+                        <div class="sub-button-desc">${subButtons.button2.desc || "多张优惠券组合"}</div>
+                    </button>
+                </div>`;
+        }
+
+        function generateImageButtonsHTML(imageButtons, redirectBase) {
+            if (!imageButtons || imageButtons.length === 0) {
+                return `<div class="image-button" style="background-image: url('https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&auto=format&fit=crop');" data-href="https://meituan.com">
+                    <div class="image-button-overlay"><div class="image-button-text">免费领取</div></div></div>`.repeat(3);
+            }
+            return imageButtons.map(button => {
+                const href = buildHref(button, redirectBase);
+                return `<div class="image-button" style="background-image: url('${button.image || ""}');" data-href="${href}">
+                    <div class="image-button-overlay"><div class="image-button-text">${button.text || "免费领取"}</div></div>
+                </div>`;
+            }).join('');
+        }
+
+        function generateTipsHTML(tips) {
+            if (!tips || tips.length === 0) return "暂无注意事项";
+            return tips.map(tip => `<p>${tip}</p>`).join('');
+        }
+
+        // ========================
+        // 初始化轮播图
+        // ========================
+        function initCarousel(carouselItems) {
+            const wrapper = document.getElementById('swiperWrapper');
+            const dots = document.querySelectorAll('.swiper-dot');
+            let currentSlide = 0;
+            const totalSlides = Math.max(1, carouselItems.length);
+
+            dots.forEach(dot => {
+                dot.addEventListener('click', function() {
+                    goToSlide(parseInt(this.getAttribute('data-index')));
+                });
+            });
+
+            if (totalSlides > 1) {
+                setInterval(() => {
+                    currentSlide = (currentSlide + 1) % totalSlides;
+                    goToSlide(currentSlide);
+                }, 5000);
+            }
+
+            let startX = 0, isDragging = false;
+            if (wrapper) {
+                wrapper.addEventListener('touchstart', function(e) { startX = e.touches[0].clientX; isDragging = true; });
+                wrapper.addEventListener('touchmove', function(e) {
+                    if (!isDragging) return;
+                    const diff = startX - e.touches[0].clientX;
+                    if (Math.abs(diff) > 50) {
+                        if (diff > 0 && currentSlide < totalSlides - 1) goToSlide(currentSlide + 1);
+                        else if (diff < 0 && currentSlide > 0) goToSlide(currentSlide - 1);
+                        isDragging = false;
+                    }
+                });
+            }
+
+            function goToSlide(index) {
+                currentSlide = index;
+                if (wrapper) wrapper.style.transform = `translateX(-${index * 100}%)`;
+                dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
+            }
+        }
+
+        // ========================
+        // 初始化按钮点击事件（统一用 data-href）
+        // ========================
+        function initButtonClickEvents() {
+            document.querySelectorAll('[data-href]').forEach(element => {
+                element.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    const href = this.getAttribute('data-href');
+                    if (!href || href === '#') {
+                        // data-href 为空，说明配置未加载
+                        return;
+                    }
+
+                    if (href.startsWith('mp://')) {
+                        // 小程序链接：必须在手机微信内打开
+                        if (isWeixinBrowser()) {
+                            window.location.href = href;
+                        } else {
+                            alert('请用手机微信扫码或在微信中打开此页面，才能跳转小程序');
+                        }
+                    } else {
+                        // 普通链接：微信内用 location.href，其他用 window.open
+                        if (isWeixinBrowser()) {
+                            window.location.href = href;
+                        } else {
+                            window.open(href, '_blank');
+                        }
+                    }
+                });
+            });
+
+            // 轮播图点击（data-link，普通链接）
+            document.querySelectorAll('.swiper-slide[data-link]').forEach(element => {
+                element.addEventListener('click', function() {
+                    const link = this.getAttribute('data-link');
+                    if (!link || link === '#') return;
+                    if (isWeixinBrowser()) {
+                        window.location.href = link;
+                    } else {
+                        window.open(link, '_blank');
+                    }
+                });
+            });
+
+            // 按压反馈
+            document.querySelectorAll('button, .image-button').forEach(el => {
+                el.addEventListener('touchstart', function() { this.style.opacity = '0.85'; }, { passive: true });
+                el.addEventListener('touchend', function() { this.style.opacity = '1'; }, { passive: true });
+            });
+        }
+
+        // ========================
+        // 默认配置
+        // ========================
+        function getDefaultConfig() {
+            return {
+                siteTitle: "美团外卖红包",
+                bgColor: "#FFD700",
+                redirectBaseUrl: "",
+                header: { enabled: true, logoUrl: "", text: "美团", textColor: "#FF6B00", fontSize: "24px", fontWeight: "bold", align: "center", logoPosition: "left", logoSize: "40px" },
+                carousel: [
+                    { image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&auto=format&fit=crop", title: "品质外卖", subtitle: "精选商家5折起", link: "https://meituan.com" },
+                    { image: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=800&auto=format&fit=crop", title: "超值优惠", subtitle: "新人专享大礼包", link: "https://meituan.com" }
+                ],
+                stepsType: "text", stepsText: "先领券 → 再下单 → 享优惠", stepsColor: "#FF6B00",
+                mainButton: { text: "领红包点外卖①", color: "linear-gradient(135deg, #FF6B00, #FF9800)", textColor: "#FFFFFF", linkType: "normal", link: "https://meituan.com", mpLink: "", mpTitle: "", mpSubtitle: "" },
+                subButtonsEnabled: true,
+                subButtons: {
+                    button1: { text: "品质会场(新)", desc: "精选商家5折起", linkType: "normal", link: "https://meituan.com", mpLink: "", mpTitle: "", mpSubtitle: "" },
+                    button2: { text: "超值券包", desc: "多张优惠券组合", linkType: "normal", link: "https://meituan.com", mpLink: "", mpTitle: "", mpSubtitle: "" }
+                },
+                imageButtonsEnabled: true,
+                imageButtons: [
+                    { image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&auto=format&fit=crop", text: "免费领取", linkType: "normal", link: "https://meituan.com", mpLink: "", mpTitle: "", mpSubtitle: "" },
+                    { image: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400&auto=format&fit=crop", text: "免费领取", linkType: "normal", link: "https://meituan.com", mpLink: "", mpTitle: "", mpSubtitle: "" },
+                    { image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&auto=format&fit=crop", text: "免费领取", linkType: "normal", link: "https://meituan.com", mpLink: "", mpTitle: "", mpSubtitle: "" }
+                ],
+                tips: [
+                    "1. 先领完上方所有的券，领完后返回此页面，点击对应按钮即可使用券。",
+                    "2. 收货人手机号和登录手机号必须一致才可用券。",
+                    "3. 美团一天可领3次，饿了么可以领两个红包。",
+                    "4. 优惠券有效期以领取时显示为准。"
+                ]
+            };
+        }
+    </script>
+</body>
+</html>
