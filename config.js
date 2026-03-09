@@ -1,9 +1,10 @@
 // 美团外卖红包配置文件
-// 自动生成时间：2026/3/9 12:55:12
+// 自动生成时间：2026/3/9 17:16:52
 
 const siteConfig = {
   "siteTitle": "美团外卖红包",
   "bgColor": "#FFD700",
+  "redirectBaseUrl": "",
   "header": {
     "enabled": true,
     "logoUrl": "",
@@ -29,44 +30,68 @@ const siteConfig = {
       "link": "https://meituan.com"
     }
   ],
-  "stepsType": "image",
+  "stepsType": "text",
   "stepsText": "先领券 → 再下单 → 享优惠",
   "stepsColor": "#FF6B00",
   "mainButton": {
-    "text": "领红包点外卖①",
+    "text": "领 外卖①",
     "color": "linear-gradient(135deg, #FF6B00, #FF9800)",
     "textColor": "#FFFFFF",
-    "link": "https://meituan.com"
+    "linkType": "normal",
+    "link": "https://meituan.com",
+    "mpLink": "",
+    "mpTitle": "",
+    "mpSubtitle": ""
   },
   "subButtonsEnabled": true,
   "subButtons": {
     "button1": {
       "text": "品质会场(新)",
       "desc": "精选商家5折起",
-      "link": "https://meituan.com"
+      "linkType": "normal",
+      "link": "https://meituan.com",
+      "mpLink": "",
+      "mpTitle": "",
+      "mpSubtitle": ""
     },
     "button2": {
-      "text": "超值券包",
-      "desc": "多张优惠券组合",
-      "link": "https://meituan.com"
+      "text": "超 券包",
+      "desc": "多张 券组合",
+      "linkType": "normal",
+      "link": "https://meituan.com",
+      "mpLink": "",
+      "mpTitle": "",
+      "mpSubtitle": ""
     }
   },
   "imageButtonsEnabled": true,
   "imageButtons": [
     {
       "image": "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&auto=format&fit=crop",
-      "text": "免费领取",
-      "link": "https://meituan.com"
+      "text": " 领取",
+      "linkType": "normal",
+      "link": "https://meituan.com",
+      "mpLink": "",
+      "mpTitle": "",
+      "mpSubtitle": ""
     },
     {
       "image": "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400&auto=format&fit=crop",
-      "text": "免费 ",
-      "link": "https://meituan.com"
+      "text": "免费  领 ",
+      "linkType": "normal",
+      "link": "https://meituan.com",
+      "mpLink": "",
+      "mpTitle": "",
+      "mpSubtitle": ""
     },
     {
       "image": "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&auto=format&fit=crop",
-      "text": "免费 ",
-      "link": "https://meituan.com"
+      "text": "免 取",
+      "linkType": "normal",
+      "link": "https://meituan.com",
+      "mpLink": "",
+      "mpTitle": "",
+      "mpSubtitle": ""
     }
   ],
   "tips": [
