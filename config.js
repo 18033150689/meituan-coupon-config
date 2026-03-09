@@ -1,10 +1,9 @@
 // 美团外卖红包配置文件
-// 自动生成时间：2026/3/9 17:53:01
+// 自动生成时间：2026/3/9 23:56:11
 
 const siteConfig = {
   "siteTitle": "美团外卖红包",
   "bgColor": "#FFD700",
-  "redirectBaseUrl": "",
   "header": {
     "enabled": true,
     "logoUrl": "",
@@ -37,33 +36,19 @@ const siteConfig = {
     "text": "领 外卖①",
     "color": "linear-gradient(135deg, #FF6B00, #FF9800)",
     "textColor": "#FFFFFF",
-    "linkType": "miniprogram",
-    "link": "https://meituan.com",
-    "mpLink": "mp://HqK16uHq9kFiCps",
-    "mpTitle": "饿了么",
-    "mpSubtitle": "微信打开",
-    "mpAppId": "",
-    "mpPath": "/pages/index/index"
+    "link": "https://meituan.com"
   },
   "subButtonsEnabled": true,
   "subButtons": {
     "button1": {
       "text": "品质会场(新)",
       "desc": "精选商家5折起",
-      "linkType": "normal",
-      "link": "https://meituan.com",
-      "mpLink": "",
-      "mpTitle": "",
-      "mpSubtitle": ""
+      "link": "https://meituan.com"
     },
     "button2": {
       "text": "超 券包",
       "desc": "多张 券组合",
-      "linkType": "normal",
-      "link": "mp://HqK16uHq9kFiCps",
-      "mpLink": "",
-      "mpTitle": "",
-      "mpSubtitle": ""
+      "link": "mp://HqK16uHq9kFiCps"
     }
   },
   "imageButtonsEnabled": true,
@@ -99,10 +84,10 @@ const siteConfig = {
   "tips": [
     "1. 先领完上方所有的券，领完后返回此页面，点击对应按钮即可使用券。",
     "2. 收货人手机 ",
-    "4. 优惠券有效期以领取时显示为准。水水水水水水"
+    "4. 优惠券 领取时显示为准。水 "
   ],
+  "redirectBaseUrl": "",
   "stepsImage": "",
-
   "wxSdkConfig": {
     "appId": "wx38215d5cdbb0be8c",
     "timestamp": 1773091937,
