@@ -75,6 +75,9 @@
         </div>
     </div>
 
+    <!-- 微信 JS-SDK -->
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+
     <script>
         // ⚠️ 【GitHub 配置区域】请修改为你的 GitHub 信息
         const GITHUB_CONFIG = {
@@ -84,6 +87,11 @@
             branch: 'main',
             path: 'config.js'
         };
+
+        // ⚠️ 【微信公众号配置】填入你的服务号 AppID
+        // 用于 JS-SDK 签名，实现网页内跳转小程序
+        // 获取方式：微信公众平台 → 设置与开发 → 基本配置 → AppID
+        const WX_APPID = 'YOUR_WX_APPID'; // 替换为你的服务号 AppID
 
         if (GITHUB_CONFIG.enabled) {
             localStorage.setItem('siteGitHubConfig', JSON.stringify({
@@ -143,22 +151,28 @@
             }
 
             initPage(config);
+
+            // 初始化微信 JS-SDK（仅在微信环境且配置了 AppID 时）
+            if (isWeixinBrowser() && WX_APPID && WX_APPID !== 'YOUR_WX_APPID') {
+                initWxSDK(config);
+            }
         });
 
         // ========================
         // 构建跳转链接
         // ========================
-        function buildHref(btnConfig, redirectBaseUrl) {
+        function buildHref(btnConfig) {
             if (!btnConfig) return '#';
             const linkType = btnConfig.linkType || 'normal';
             if (linkType === 'miniprogram') {
-                const mpLink = btnConfig.mpLink || '';
-                if (!mpLink) return '#';
-                return mpLink;
+                return btnConfig.mpLink || '#';
             }
-            // 普通链接类型，但如果填的是 mp:// 格式，也当小程序链接处理
-            const link = btnConfig.link || '#';
-            return link;
+            return btnConfig.link || '#';
+        }
+
+        // 获取小程序 AppID（优先用配置里的，其次用全局常量）
+        function getMpAppId(btnConfig) {
+            return (btnConfig && btnConfig.mpAppId) || (window._siteWxMpAppId) || '';
         }
 
         // 判断是否在微信环境
@@ -166,35 +180,103 @@
             return /MicroMessenger/i.test(navigator.userAgent);
         }
 
-        // 跳转到小程序（兼容多种格式）
-        function jumpToMiniProgram(mpLink) {
-            // 支持多种小程序链接格式
-            // 格式1: mp://xxxxx  -> 微信小程序 URL Scheme（通过中间页跳转）
-            // 格式2: https://mp.weixin.qq.com/s?... -> 直接跳
-            // 格式3: weixin://dl/business/?t=xxxxx -> 直接跳
+        // 判断按钮是否需要用开放标签跳小程序
+        function isMpButton(btnConfig) {
+            if (!btnConfig) return false;
+            const linkType = btnConfig.linkType || 'normal';
+            if (linkType === 'miniprogram') return true;
+            // 普通链接填了 mp:// 也算
+            const link = btnConfig.link || '';
+            return link.startsWith('mp://') || link.startsWith('weixin://');
+        }
 
-            if (mpLink.startsWith('https://') || mpLink.startsWith('http://')) {
-                // 普通https链接，直接跳
-                window.location.href = mpLink;
-                return;
+        // 从 mp:// 提取 path（用于 wx-open-launch-weapp 的 path 属性）
+        function getMpPath(mpLink) {
+            // mp://HqK16uHq9kFiCps 格式不是页面路径，是 URL Scheme token
+            // wx-open-launch-weapp 的 path 需要是小程序页面路径，如 /pages/index/index
+            // 如果没有配置具体路径，默认跳小程序首页
+            return '/pages/index/index';
+        }
+
+        // ========================
+        // 生成微信开放标签按钮（wx-open-launch-weapp）
+        // ========================
+        function generateWxOpenButton(btnConfig, styleClass, innerHTML) {
+            const mpAppId = getMpAppId(btnConfig);
+            if (!mpAppId) {
+                // 没有配置小程序 AppID，降级为普通按钮
+                return null;
             }
+            const mpPath = (btnConfig && btnConfig.mpPath) || '/pages/index/index';
+            return { mpAppId, mpPath };
+        }
 
-            if (mpLink.startsWith('weixin://')) {
-                window.location.href = mpLink;
-                return;
+        // ========================
+        // 微信 JS-SDK 初始化
+        // ========================
+        async function initWxSDK(config) {
+            try {
+                // 需要后端提供签名接口，这里用公众号 AppID 配合签名
+                // 由于是纯静态页面，无法在前端完成签名
+                // 方案：用你的服务号开发接口，或使用第三方签名服务
+                // 这里先注册 wx.config，签名从 config.js 中读取（需要后端配合）
+                const wxConfig = config.wxSdkConfig;
+                if (!wxConfig) {
+                    console.warn('未配置 wxSdkConfig，无法初始化 JS-SDK');
+                    return;
+                }
+                wx.config({
+                    debug: false,
+                    appId: wxConfig.appId,
+                    timestamp: wxConfig.timestamp,
+                    nonceStr: wxConfig.nonceStr,
+                    signature: wxConfig.signature,
+                    jsApiList: ['openLocation'],
+                    openTagList: ['wx-open-launch-weapp']
+                });
+                wx.ready(function() {
+                    console.log('微信 JS-SDK 初始化成功');
+                    // 重新渲染所有小程序按钮为开放标签
+                    renderWxOpenButtons(config);
+                });
+                wx.error(function(res) {
+                    console.error('微信 JS-SDK 初始化失败:', res);
+                });
+            } catch(e) {
+                console.error('initWxSDK error:', e);
             }
+        }
 
-            if (mpLink.startsWith('mp://')) {
-                // mp:// 格式：提取 token，构造微信中间跳转链接
-                const token = mpLink.replace('mp://', '');
-                // 方案A：使用微信 URL Scheme 标准格式
-                const weixinScheme = `weixin://dl/business/?t=${token}`;
-                window.location.href = weixinScheme;
-                return;
-            }
+        // 将页面中所有小程序按钮替换为 wx-open-launch-weapp
+        function renderWxOpenButtons(config) {
+            document.querySelectorAll('[data-mp-appid]').forEach(function(wrapper) {
+                const appId = wrapper.getAttribute('data-mp-appid');
+                const path = wrapper.getAttribute('data-mp-path') || '/pages/index/index';
+                const inner = wrapper.querySelector('.mp-btn-inner');
+                if (!inner || !appId) return;
 
-            // 其他格式，直接尝试
-            window.location.href = mpLink;
+                const launchBtn = document.createElement('wx-open-launch-weapp');
+                launchBtn.setAttribute('appid', appId);
+                launchBtn.setAttribute('path', path);
+                launchBtn.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;';
+
+                const tmpl = document.createElement('template');
+                tmpl.innerHTML = `<div style="width:100%;height:100%;"></div>`;
+                launchBtn.appendChild(tmpl);
+
+                wrapper.style.position = 'relative';
+                wrapper.appendChild(launchBtn);
+
+                launchBtn.addEventListener('launch', function() {
+                    console.log('小程序跳转成功');
+                });
+                launchBtn.addEventListener('error', function(e) {
+                    console.error('小程序跳转失败:', e.detail);
+                    // 降级：尝试直接跳转
+                    const mpLink = wrapper.getAttribute('data-mp-link') || '';
+                    if (mpLink) window.location.href = mpLink;
+                });
+            });
         }
 
         // ========================
@@ -296,7 +378,19 @@
 
         function generateMainButtonHTML(mainButton, redirectBase) {
             if (!mainButton || !mainButton.text) return '';
-            const href = buildHref(mainButton, redirectBase);
+            const href = buildHref(mainButton);
+            const isMp = isMpButton(mainButton);
+            const mpAppId = getMpAppId(mainButton);
+            const mpPath = mainButton.mpPath || '/pages/index/index';
+            if (isMp && mpAppId) {
+                return `
+                <div class="mp-btn-wrapper" data-mp-appid="${mpAppId}" data-mp-path="${mpPath}" data-mp-link="${href}">
+                    <button class="main-button mp-btn-inner"
+                            style="background: ${mainButton.color || 'linear-gradient(135deg, #FF6B00, #FF9800)'}; color: ${mainButton.textColor || '#FFFFFF'}; width:100%; pointer-events:none;">
+                        ${mainButton.text}
+                    </button>
+                </div>`;
+            }
             return `
                 <button class="main-button"
                         style="background: ${mainButton.color || 'linear-gradient(135deg, #FF6B00, #FF9800)'}; color: ${mainButton.textColor || '#FFFFFF'};"
@@ -307,19 +401,27 @@
 
         function generateSubButtonsHTML(subButtons, redirectBase) {
             if (!subButtons || !subButtons.button1) return '';
-            const href1 = buildHref(subButtons.button1, redirectBase);
-            const href2 = buildHref(subButtons.button2, redirectBase);
-            return `
-                <div class="sub-buttons">
-                    <button class="sub-button" data-href="${href1}">
-                        <div class="sub-button-title">${subButtons.button1.text || "品质会场(新)"}</div>
-                        <div class="sub-button-desc">${subButtons.button1.desc || "精选商家5折起"}</div>
-                    </button>
-                    <button class="sub-button" data-href="${href2}">
-                        <div class="sub-button-title">${subButtons.button2.text || "超值券包"}</div>
-                        <div class="sub-button-desc">${subButtons.button2.desc || "多张优惠券组合"}</div>
-                    </button>
-                </div>`;
+            function renderSubBtn(btn) {
+                const href = buildHref(btn);
+                const isMp = isMpButton(btn);
+                const mpAppId = getMpAppId(btn);
+                const mpPath = btn.mpPath || '/pages/index/index';
+                if (isMp && mpAppId) {
+                    return `
+                    <div class="sub-button mp-btn-wrapper" data-mp-appid="${mpAppId}" data-mp-path="${mpPath}" data-mp-link="${href}">
+                        <div class="mp-btn-inner" style="pointer-events:none;">
+                            <div class="sub-button-title">${btn.text || ''}</div>
+                            <div class="sub-button-desc">${btn.desc || ''}</div>
+                        </div>
+                    </div>`;
+                }
+                return `
+                <button class="sub-button" data-href="${href}">
+                    <div class="sub-button-title">${btn.text || ''}</div>
+                    <div class="sub-button-desc">${btn.desc || ''}</div>
+                </button>`;
+            }
+            return `<div class="sub-buttons">${renderSubBtn(subButtons.button1)}${renderSubBtn(subButtons.button2 || {})}</div>`;
         }
 
         function generateImageButtonsHTML(imageButtons, redirectBase) {
@@ -328,7 +430,18 @@
                     <div class="image-button-overlay"><div class="image-button-text">免费领取</div></div></div>`.repeat(3);
             }
             return imageButtons.map(button => {
-                const href = buildHref(button, redirectBase);
+                const href = buildHref(button);
+                const isMp = isMpButton(button);
+                const mpAppId = getMpAppId(button);
+                const mpPath = button.mpPath || '/pages/index/index';
+                if (isMp && mpAppId) {
+                    return `<div class="image-button mp-btn-wrapper" style="background-image: url('${button.image || ""}');"
+                        data-mp-appid="${mpAppId}" data-mp-path="${mpPath}" data-mp-link="${href}">
+                        <div class="image-button-overlay mp-btn-inner" style="pointer-events:none;">
+                            <div class="image-button-text">${button.text || "免费领取"}</div>
+                        </div>
+                    </div>`;
+                }
                 return `<div class="image-button" style="background-image: url('${button.image || ""}');" data-href="${href}">
                     <div class="image-button-overlay"><div class="image-button-text">${button.text || "免费领取"}</div></div>
                 </div>`;
@@ -387,27 +500,37 @@
         // 初始化按钮点击事件（统一用 data-href）
         // ========================
         function initButtonClickEvents() {
+            // 普通链接按钮
             document.querySelectorAll('[data-href]').forEach(element => {
                 element.addEventListener('click', function(e) {
                     e.stopPropagation();
                     e.preventDefault();
                     const href = this.getAttribute('data-href');
                     if (!href || href === '#') return;
+                    window.open(href, '_blank');
+                });
+            });
 
-                    // 只要链接以 mp:// 或 weixin:// 开头，都走小程序跳转
-                    const isMpScheme = href.startsWith('mp://') || href.startsWith('weixin://');
-                    // 普通链接里也可能填了 mp://，一并处理
-                    const isMpNormal = !isMpScheme && (href.startsWith('mp://'));
-
-                    if (isMpScheme) {
-                        jumpToMiniProgram(href);
+            // 小程序按钮：未挂载开放标签时的降级点击（无 AppID 配置时）
+            document.querySelectorAll('.mp-btn-wrapper:not([data-wx-ready])').forEach(element => {
+                element.addEventListener('click', function(e) {
+                    const mpLink = this.getAttribute('data-mp-link') || '';
+                    if (!mpLink) return;
+                    if (isWeixinBrowser()) {
+                        // 尝试用 weixin:// 协议（部分版本支持）
+                        if (mpLink.startsWith('mp://')) {
+                            const token = mpLink.replace('mp://', '');
+                            window.location.href = `weixin://dl/business/?t=${token}`;
+                        } else {
+                            window.location.href = mpLink;
+                        }
                     } else {
-                        window.open(href, '_blank');
+                        alert('请用手机微信打开此页面，才能跳转小程序');
                     }
                 });
             });
 
-            // 轮播图点击（data-link）
+            // 轮播图点击
             document.querySelectorAll('.swiper-slide[data-link]').forEach(element => {
                 element.addEventListener('click', function() {
                     const link = this.getAttribute('data-link');
@@ -417,7 +540,7 @@
             });
 
             // 按压反馈
-            document.querySelectorAll('button, .image-button').forEach(el => {
+            document.querySelectorAll('button, .image-button, .mp-btn-wrapper').forEach(el => {
                 el.addEventListener('touchstart', function() { this.style.opacity = '0.85'; }, { passive: true });
                 el.addEventListener('touchend', function() { this.style.opacity = '1'; }, { passive: true });
             });
