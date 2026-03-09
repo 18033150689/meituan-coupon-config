@@ -152,6 +152,9 @@
 
             initPage(config);
 
+            // 保存公众号 AppID 到全局（供 getMpAppId 使用）
+            if (config.wxAppId) window._siteWxMpAppId = config.wxAppId;
+
             // 初始化微信 JS-SDK（仅在微信环境且配置了 AppID 时）
             if (isWeixinBrowser() && WX_APPID && WX_APPID !== 'YOUR_WX_APPID') {
                 initWxSDK(config);
