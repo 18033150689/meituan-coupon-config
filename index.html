@@ -156,7 +156,9 @@
                 if (!mpLink) return '#';
                 return mpLink;
             }
-            return btnConfig.link || '#';
+            // 普通链接类型，但如果填的是 mp:// 格式，也当小程序链接处理
+            const link = btnConfig.link || '#';
+            return link;
         }
 
         // 判断是否在微信环境
@@ -392,14 +394,13 @@
                     const href = this.getAttribute('data-href');
                     if (!href || href === '#') return;
 
-                    const isMp = href.startsWith('mp://') || href.startsWith('weixin://');
+                    // 只要链接以 mp:// 或 weixin:// 开头，都走小程序跳转
+                    const isMpScheme = href.startsWith('mp://') || href.startsWith('weixin://');
+                    // 普通链接里也可能填了 mp://，一并处理
+                    const isMpNormal = !isMpScheme && (href.startsWith('mp://'));
 
-                    if (isMp) {
-                        if (isWeixinBrowser()) {
-                            jumpToMiniProgram(href);
-                        } else {
-                            alert('请用手机微信扫码或在微信中打开此页面，才能跳转小程序');
-                        }
+                    if (isMpScheme) {
+                        jumpToMiniProgram(href);
                     } else {
                         window.open(href, '_blank');
                     }
