@@ -41,7 +41,9 @@ const siteConfig = {
     "link": "https://meituan.com",
     "mpLink": "mp://HqK16uHq9kFiCps",
     "mpTitle": "饿了么",
-    "mpSubtitle": "微信打开"
+    "mpSubtitle": "微信打开",
+    "mpAppId": "",
+    "mpPath": "/pages/index/index"
   },
   "subButtonsEnabled": true,
   "subButtons": {
@@ -58,7 +60,7 @@ const siteConfig = {
       "text": "超 券包",
       "desc": "多张 券组合",
       "linkType": "normal",
-      "link": "https://meituan.com",
+      "link": "mp://HqK16uHq9kFiCps",
       "mpLink": "",
       "mpTitle": "",
       "mpSubtitle": ""
@@ -99,7 +101,14 @@ const siteConfig = {
     "2. 收货人手机 ",
     "4. 优惠券有效期以领取时显示为准。水水水水水水"
   ],
-  "stepsImage": ""
+  "stepsImage": "",
+
+  "wxSdkConfig": {
+    "appId": "wx38215d5cdbb0be8c",
+    "timestamp": 1773091937,
+    "nonceStr": "couponxk8a2b",
+    "signature": "14ff7d036fd852f2c98f3ce6607dcb52dc480c02"
+  }
 };
 
 // 导出配置
