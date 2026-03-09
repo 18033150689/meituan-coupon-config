@@ -154,7 +154,6 @@
             if (linkType === 'miniprogram') {
                 const mpLink = btnConfig.mpLink || '';
                 if (!mpLink) return '#';
-                // 直接返回 mp:// 链接，在微信内通过 location.href 跳转
                 return mpLink;
             }
             return btnConfig.link || '#';
@@ -163,6 +162,37 @@
         // 判断是否在微信环境
         function isWeixinBrowser() {
             return /MicroMessenger/i.test(navigator.userAgent);
+        }
+
+        // 跳转到小程序（兼容多种格式）
+        function jumpToMiniProgram(mpLink) {
+            // 支持多种小程序链接格式
+            // 格式1: mp://xxxxx  -> 微信小程序 URL Scheme（通过中间页跳转）
+            // 格式2: https://mp.weixin.qq.com/s?... -> 直接跳
+            // 格式3: weixin://dl/business/?t=xxxxx -> 直接跳
+
+            if (mpLink.startsWith('https://') || mpLink.startsWith('http://')) {
+                // 普通https链接，直接跳
+                window.location.href = mpLink;
+                return;
+            }
+
+            if (mpLink.startsWith('weixin://')) {
+                window.location.href = mpLink;
+                return;
+            }
+
+            if (mpLink.startsWith('mp://')) {
+                // mp:// 格式：提取 token，构造微信中间跳转链接
+                const token = mpLink.replace('mp://', '');
+                // 方案A：使用微信 URL Scheme 标准格式
+                const weixinScheme = `weixin://dl/business/?t=${token}`;
+                window.location.href = weixinScheme;
+                return;
+            }
+
+            // 其他格式，直接尝试
+            window.location.href = mpLink;
         }
 
         // ========================
@@ -360,39 +390,28 @@
                     e.stopPropagation();
                     e.preventDefault();
                     const href = this.getAttribute('data-href');
-                    if (!href || href === '#') {
-                        // data-href 为空，说明配置未加载
-                        return;
-                    }
+                    if (!href || href === '#') return;
 
-                    if (href.startsWith('mp://')) {
-                        // 小程序链接：必须在手机微信内打开
+                    const isMp = href.startsWith('mp://') || href.startsWith('weixin://');
+
+                    if (isMp) {
                         if (isWeixinBrowser()) {
-                            window.location.href = href;
+                            jumpToMiniProgram(href);
                         } else {
                             alert('请用手机微信扫码或在微信中打开此页面，才能跳转小程序');
                         }
                     } else {
-                        // 普通链接：微信内用 location.href，其他用 window.open
-                        if (isWeixinBrowser()) {
-                            window.location.href = href;
-                        } else {
-                            window.open(href, '_blank');
-                        }
+                        window.open(href, '_blank');
                     }
                 });
             });
 
-            // 轮播图点击（data-link，普通链接）
+            // 轮播图点击（data-link）
             document.querySelectorAll('.swiper-slide[data-link]').forEach(element => {
                 element.addEventListener('click', function() {
                     const link = this.getAttribute('data-link');
                     if (!link || link === '#') return;
-                    if (isWeixinBrowser()) {
-                        window.location.href = link;
-                    } else {
-                        window.open(link, '_blank');
-                    }
+                    window.open(link, '_blank');
                 });
             });
 
