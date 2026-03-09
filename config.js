@@ -70,7 +70,7 @@ const siteConfig = {
       "image": "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&auto=format&fit=crop",
       "text": " 领取",
       "linkType": "normal",
-      "link": "https://meituan.com",
+      "link": "mp://HqK16uHq9kFiCps",
       "mpLink": "",
       "mpTitle": "",
       "mpSubtitle": ""
