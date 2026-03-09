@@ -1,5 +1,5 @@
 // 美团外卖红包配置文件
-// 自动生成时间：2026/3/9 17:19:29
+// 自动生成时间：2026/3/9 17:29:24
 
 const siteConfig = {
   "siteTitle": "美团外卖红包",
@@ -37,11 +37,11 @@ const siteConfig = {
     "text": "领 外卖①",
     "color": "linear-gradient(135deg, #FF6B00, #FF9800)",
     "textColor": "#FFFFFF",
-    "linkType": "normal",
+    "linkType": "miniprogram",
     "link": "https://meituan.com",
-    "mpLink": "",
-    "mpTitle": "",
-    "mpSubtitle": ""
+    "mpLink": "mp://HqK16uHq9kFiCps",
+    "mpTitle": "饿了么",
+    "mpSubtitle": "微信打开"
   },
   "subButtonsEnabled": true,
   "subButtons": {
