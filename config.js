@@ -1,83 +1,83 @@
-// 缇庡洟澶栧崠绾㈠寘閰嶇疆鏂囦欢
-// 鑷姩鐢熸垚鏃堕棿锛?${new Date().toLocaleString()}
+// 美团外卖红包配置文件
+// 自动生成时间：2026/3/9 12:38:47
 
 const siteConfig = {
-    siteTitle: "缇庡洟澶栧崠绾㈠寘",
-    bgColor: "#FFD700",
-    header: {
-        enabled: true,
-        logoUrl: "",
-        text: "缇庡洟",
-        textColor: "#FF6B00",
-        fontSize: "24px",
-        fontWeight: "bold",
-        align: "center",
-        logoPosition: "left",
-        logoSize: "40px"
+  "siteTitle": "饿了么外卖红包",
+  "bgColor": "#3f95ff",
+  "header": {
+    "enabled": true,
+    "logoUrl": "https://test.fukit.cn/autoupload/f/90B1BiV42O9JOwrrDNqX99iO_OyvX7mIgxFBfDMDErs/20260307/6RCU/1308X1280/565df7546323c43a291c5f6edb92f35c.jpg/webp",
+    "text": "饿了么",
+    "textColor": "#000000",
+    "fontSize": "24px",
+    "fontWeight": "bold",
+    "align": "center",
+    "logoPosition": "left",
+    "logoSize": "40px"
+  },
+  "carousel": [
+    {
+      "image": "https://test.fukit.cn/autoupload/f/90B1BiV42O9JOwrrDNqX99iO_OyvX7mIgxFBfDMDErs/20260307/6Bzm/750X650/%E5%93%88%E6%A0%B9%E8%BE%BE%E6%96%AF.jpeg/webp",
+      "title": "哈根达斯",
+      "subtitle": "满50减8可叠加！",
+      "link": "https://mp.weixin.qq.com/s/Hv918eS5p5dRwvHFF6tGuw"
     },
-    carousel: [
-        {
-            image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&auto=format&fit=crop",
-            title: "鍝佽川澶栧崠",
-            subtitle: "绮鹃?夊晢瀹?5鎶樿捣",
-            link: "https://meituan.com"
-        },
-        {
-            image: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=800&auto=format&fit=crop",
-            title: "瓒呭?间紭鎯?",
-            subtitle: "鏂颁汉涓撲韩澶хぜ鍖?",
-            link: "https://meituan.com"
-        }
-    ],
-    stepsType: "text",
-    stepsText: "鍏堥鍒? 鈫? 鍐嶄笅鍗? 鈫? 浜紭鎯?",
-    stepsColor: "#FF6B00",
-    mainButton: {
-        text: "棰嗙孩鍖呯偣澶栧崠鈶?",
-        color: "linear-gradient(135deg, #FF6B00, #FF9800)",
-        textColor: "#FFFFFF",
-        link: "https://meituan.com"
+    {
+      "image": "https://test.fukit.cn/autoupload/f/90B1BiV42O9JOwrrDNqX99iO_OyvX7mIgxFBfDMDErs/20260307/xPAO/750X650/%E4%B9%90%E4%B9%90%E8%8C%B6.jpeg/webp",
+      "title": "乐乐茶",
+      "subtitle": "满30减8可叠加",
+      "link": "https://mp.weixin.qq.com/s/4W8U2asGg8umfGWJ_1O6-g"
+    }
+  ],
+  "stepsType": "image",
+  "stepsText": "先领券 → 再下单 → 享优惠",
+  "stepsColor": "#FF6B00",
+  "mainButton": {
+    "text": "天 包",
+    "color": "#005aad",
+    "textColor": "#FFFFFF",
+    "link": "https://mp.weixin.qq.com/s/Rb0a2l7D9A3buMtXzw0Zjg"
+  },
+  "subButtonsEnabled": true,
+  "subButtons": {
+    "button1": {
+      "text": "消费日专属",
+      "desc": "城市大额红包城市通用消费红包",
+      "link": "https://mp.weixin.qq.com/s/kY_6eWWm577-2f4pL-01Wg"
     },
-    subButtonsEnabled: true,
-    subButtons: {
-        button1: {
-            text: "鍝佽川浼氬満(鏂?)",
-            desc: "绮鹃?夊晢瀹?5鎶樿捣",
-            link: "https://meituan.com"
-        },
-        button2: {
-            text: "瓒呭?煎埜鍖?",
-            desc: "澶氬紶浼樻儬鍒哥粍鍚?",
-            link: "https://meituan.com"
-        }
+    "button2": {
+      "text": " 快闪",
+      "desc": "最高 8元红包",
+      "link": "https://mp.weixin.qq.com/s/Qt2I5Ix1-N7zwkjXbHLCzQ"
+    }
+  },
+  "imageButtonsEnabled": true,
+  "imageButtons": [
+    {
+      "image": "https://test.fukit.cn/autoupload/f/90B1BiV42O9JOwrrDNqX99iO_OyvX7mIgxFBfDMDErs/20260307/vSJg/750X651/%E6%B1%89%E5%A0%A1%E7%8E%8B.jpeg/webp",
+      "text": "满40 叠加",
+      "link": "http://dpurl.cn/2IPwHM1z"
     },
-    imageButtonsEnabled: true,
-    imageButtons: [
-        {
-            image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&auto=format&fit=crop",
-            text: "鍏嶈垂棰嗗彇",
-            link: "https://meituan.com"
-        },
-        {
-            image: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400&auto=format&fit=crop",
-            text: "鍏嶈垂棰嗗彇",
-            link: "https://meituan.com"
-        },
-        {
-            image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&auto=format&fit=crop",
-            text: "鍏嶈垂棰嗗彇",
-            link: "https://meituan.com"
-        }
-    ],
-    tips: [
-        "1. 鍏堥瀹屼笂鏂规墍鏈夌殑鍒革紝棰嗗畬鍚庤繑鍥炴椤甸潰锛岀偣鍑诲搴旀寜閽嵆鍙娇鐢ㄥ埜銆?",
-        "2. 鏀惰揣浜烘墜鏈哄彿鍜岀櫥褰曟墜鏈哄彿蹇呴』涓?鑷存墠鍙敤鍒搞??",
-        "3. 缇庡洟涓?澶╁彲棰?3娆★紝楗夸簡涔堝彲浠ラ涓や釜绾㈠寘銆?",
-        "4. 浼樻儬鍒告湁鏁堟湡浠ラ鍙栨椂鏄剧ず涓哄噯銆?"
-    ]
+    {
+      "image": "https://test.fukit.cn/autoupload/f/90B1BiV42O9JOwrrDNqX99iO_OyvX7mIgxFBfDMDErs/20260307/jRq4/750X649/%E5%8D%8E%E8%8E%B1%E5%A3%AB.jpeg/webp",
+      "text": "满 可叠加",
+      "link": "http://dpurl.cn/YzzSTMIz"
+    },
+    {
+      "image": "https://test.fukit.cn/autoupload/f/90B1BiV42O9JOwrrDNqX99iO_OyvX7mIgxFBfDMDErs/20260307/kPLQ/750X648/%E6%B0%B8%E5%92%8C%E5%A4%A7%E7%8E%8B.jpeg/webp",
+      "text": "满30 可叠加",
+      "link": "http://dpurl.cn/HMGWpnKz"
+    }
+  ],
+  "tips": [
+    "1. 先领完上方所有的券，领完后返回此页面，点击“快速用券”-点去使用，即可使用券。",
+    "2. 饿了么，点外卖红包和加餐 中心教程进行修改。",
+    "4. 美团一天可领3次，饿了么可以领两个(外卖红包和加餐红包)"
+  ],
+  "stepsImage": "https://test.fukit.cn/autoupload/f/90B1BiV42O9JOwrrDNqX99iO_OyvX7mIgxFBfDMDErs/20260307/dl4F/626X135/1.png/webp"
 };
 
-// 瀵煎嚭閰嶇疆
+// 导出配置
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = siteConfig;
 }
