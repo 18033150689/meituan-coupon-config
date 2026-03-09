@@ -1,0 +1,1890 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>美团外卖红包后台管理系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: "Microsoft YaHei", Arial, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #FF6B00, #FF9800);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .header h1 {
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+        }
+        
+        .config-section {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #FF6B00;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #FFE0B2;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .color-input {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .color-preview {
+            width: 30px;
+            height: 30px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            flex-shrink: 0;
+        }
+        
+        .item-list {
+            border: 1px solid #eee;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .item {
+            background: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            border-left: 4px solid #FF6B00;
+        }
+        
+        .item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .item-title {
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .remove-btn {
+            background: #ff5252;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .remove-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .add-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: block;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        
+        .toggle-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .toggle-slider {
+            background-color: #4CAF50;
+        }
+        
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+        
+        .actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            min-width: 150px;
+        }
+        
+        .save-btn {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .reset-btn {
+            background: #FF9800;
+            color: white;
+        }
+        
+        .export-btn {
+            background: #2196F3;
+            color: white;
+        }
+        
+        .import-btn {
+            background: #9C27B0;
+            color: white;
+        }
+        
+        .preview-btn {
+            background: #00BCD4;
+            color: white;
+        }
+        
+        .tips {
+            background: #E3F2FD;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-size: 13px;
+            color: #1976D2;
+        }
+
+        .tips-warning {
+            background: #FFF3E0;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-size: 13px;
+            color: #E65100;
+        }
+        
+        .row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .row .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+        
+        .preview-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 320px;
+            height: 600px;
+            border: 2px solid #333;
+            border-radius: 20px;
+            overflow: hidden;
+            background: white;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .preview-header {
+            background: #333;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .close-preview {
+            background: #ff5252;
+            color: white;
+            border: none;
+            padding: 2px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .preview-frame {
+            width: 100%;
+            height: calc(100% - 40px);
+            border: none;
+        }
+        
+        .message {
+            background: #4CAF50;
+            color: white;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+            text-align: center;
+            display: none;
+        }
+
+        .api-config {
+            background: #E8F5E9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .api-config h3 {
+            color: #2E7D32;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 上传config.js区域 */
+        .upload-zone {
+            border: 2px dashed #9C27B0;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #F3E5F5;
+            margin-bottom: 15px;
+        }
+
+        .upload-zone:hover {
+            background: #E1BEE7;
+            border-color: #7B1FA2;
+        }
+
+        .upload-zone.dragover {
+            background: #CE93D8;
+            border-color: #4A148C;
+        }
+
+        .upload-zone p {
+            color: #7B1FA2;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+
+        .upload-zone .upload-icon {
+            font-size: 36px;
+        }
+
+        .upload-info {
+            background: #EDE7F6;
+            border-radius: 6px;
+            padding: 10px 15px;
+            font-size: 13px;
+            color: #512DA8;
+            display: none;
+            margin-bottom: 10px;
+        }
+
+        /* 小程序链接选项 */
+        .link-type-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .link-type-group label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: normal;
+            cursor: pointer;
+            color: #555;
+        }
+
+        .link-type-group input[type="radio"] {
+            width: auto;
+            cursor: pointer;
+        }
+
+        .mp-config {
+            background: #E8F5E9;
+            border: 1px solid #A5D6A7;
+            border-radius: 6px;
+            padding: 12px;
+            margin-top: 8px;
+        }
+
+        .mp-config label {
+            color: #2E7D32;
+            font-weight: bold;
+        }
+
+        .mp-config input {
+            border-color: #A5D6A7;
+        }
+
+        .mp-tag {
+            display: inline-block;
+            background: #07C160;
+            color: white;
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+
+        .normal-link-config {
+            margin-top: 8px;
+        }
+        
+        @media (max-width: 768px) {
+            .row {
+                flex-direction: column;
+            }
+            
+            .actions {
+                flex-direction: column;
+            }
+            
+            .action-btn {
+                width: 100%;
+            }
+            
+            .preview-container {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>美团外卖红包后台管理系统</h1>
+            <p>修改配置后点击"上传到 GitHub"，配置将自动同步到展示页面</p>
+        </div>
+
+        <!-- API 配置 -->
+        <div class="config-section">
+            <h2 class="section-title">0. GitHub API 配置</h2>
+            <div class="api-config">
+                <h3>📝 配置说明</h3>
+                <p style="font-size: 13px; color: #666; margin-bottom: 10px;">
+                    需要在 GitHub 创建 Personal Access Token，权限选择 repo (完整仓库控制权)
+                </p>
+            </div>
+            <div class="form-group">
+                <label>GitHub 用户名：</label>
+                <input type="text" id="github-username" placeholder="例如：your-username">
+            </div>
+            <div class="form-group">
+                <label>仓库名称：</label>
+                <input type="text" id="github-repo" placeholder="例如：your-repo-name">
+            </div>
+            <div class="form-group">
+                <label>Personal Access Token：</label>
+                <input type="password" id="github-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+                <div class="tips">Token 将保存在本地浏览器中，不会上传到服务器</div>
+            </div>
+            <div class="form-group">
+                <label>config.js 文件路径：</label>
+                <input type="text" id="config-path" value="config.js" placeholder="例如：config.js">
+            </div>
+            <button class="action-btn save-btn" onclick="testGitHubConnection()" style="padding: 10px 20px; font-size: 14px;">🔍 测试连接</button>
+            <div id="connection-status" style="margin-top: 10px; font-size: 14px;"></div>
+        </div>
+
+        <!-- 导入 config.js -->
+        <div class="config-section">
+            <h2 class="section-title">📂 导入已有 config.js</h2>
+            <p style="font-size: 14px; color: #666; margin-bottom: 15px;">
+                如果你之前已下载过 config.js，可以直接上传导入，无需重新填写所有配置。
+            </p>
+            <div class="upload-zone" id="uploadZone" onclick="document.getElementById('configFileInput').click()">
+                <div class="upload-icon">📄</div>
+                <div style="font-size: 16px; font-weight: bold; color: #7B1FA2; margin-top: 6px;">点击选择 config.js 文件</div>
+                <p>或将文件拖拽到此处</p>
+            </div>
+            <div class="upload-info" id="uploadInfo"></div>
+            <input type="file" id="configFileInput" accept=".js" style="display:none" onchange="importConfigFile(this)">
+        </div>
+        
+        <!-- 顶部栏设置 -->
+        <div class="config-section">
+            <h2 class="section-title">1. 顶部栏设置</h2>
+            
+            <div class="toggle-group">
+                <label>启用顶部栏：</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="header-enabled" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            
+            <div id="header-config">
+                <div class="form-group">
+                    <label>Logo图片URL：</label>
+                    <input type="text" id="header-logo-url" placeholder="输入Logo图片链接（可选）">
+                    <div class="tips">建议尺寸：40x40像素，正方形图片。如果不填，则只显示文字</div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Logo图片大小：</label>
+                    <input type="text" id="header-logo-size" value="40px" placeholder="例如：40px">
+                </div>
+                
+                <div class="form-group">
+                    <label>显示文字：</label>
+                    <input type="text" id="header-text" value="美团" placeholder="输入顶部栏文字">
+                </div>
+                
+                <div class="row">
+                    <div class="form-group">
+                        <label>文字颜色：</label>
+                        <div class="color-input">
+                            <div class="color-preview" id="header-text-color-preview" style="background: #FF6B00;"></div>
+                            <input type="color" id="header-text-color" value="#FF6B00">
+                            <input type="text" id="header-text-color-text" value="#FF6B00" placeholder="#FF6B00">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>文字大小：</label>
+                        <input type="text" id="header-font-size" value="24px" placeholder="例如：24px">
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="form-group">
+                        <label>文字粗细：</label>
+                        <select id="header-font-weight">
+                            <option value="normal">普通</option>
+                            <option value="bold" selected>加粗</option>
+                            <option value="bolder">更粗</option>
+                            <option value="lighter">更细</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>对齐方式：</label>
+                        <select id="header-align">
+                            <option value="left">左对齐</option>
+                            <option value="center" selected>居中</option>
+                            <option value="right">右对齐</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Logo位置：</label>
+                    <select id="header-logo-position">
+                        <option value="left" selected>Logo在左，文字在右</option>
+                        <option value="right">文字在左，Logo在右</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 基本设置 -->
+        <div class="config-section">
+            <h2 class="section-title">2. 基本设置</h2>
+            <div class="form-group">
+                <label>网站标题：</label>
+                <input type="text" id="site-title" value="美团外卖红包" placeholder="输入网站标题">
+            </div>
+            <div class="form-group">
+                <label>背景颜色：</label>
+                <div class="color-input">
+                    <div class="color-preview" id="bg-color-preview" style="background: #FFD700;"></div>
+                    <input type="color" id="bg-color" value="#FFD700">
+                    <input type="text" id="bg-color-text" value="#FFD700" placeholder="#FFD700">
+                </div>
+            </div>
+
+            <!-- redirect.html 部署地址 -->
+            <div class="form-group">
+                <label>小程序中间跳转页地址：</label>
+                <input type="text" id="redirect-base-url" placeholder="例如：https://your-site.netlify.app/redirect.html">
+                <div class="tips">
+                    部署 redirect.html 后填写其访问地址。当按钮链接类型设为"小程序"时，点击将跳转到此页面再打开小程序。
+                </div>
+            </div>
+        </div>
+        
+        <!-- 轮播图设置 -->
+        <div class="config-section">
+            <h2 class="section-title">3. 轮播图设置（最多3张）</h2>
+            <div class="tips">支持左右滑动，点击可跳转</div>
+            <div class="item-list" id="carousel-list"></div>
+            <button class="add-btn" onclick="addCarouselItem()">+ 添加轮播图</button>
+        </div>
+        
+        <!-- 领券步骤设置 -->
+        <div class="config-section">
+            <h2 class="section-title">4. 领券步骤设置</h2>
+            <div class="form-group">
+                <label>显示方式：</label>
+                <select id="steps-type">
+                    <option value="text">文字</option>
+                    <option value="image">图片</option>
+                </select>
+            </div>
+            
+            <div id="steps-text-config">
+                <div class="form-group">
+                    <label>步骤文字：</label>
+                    <input type="text" id="steps-text" value="先领券 → 再下单 → 享优惠" placeholder="输入步骤文字">
+                </div>
+                
+                <div class="form-group">
+                    <label>文字颜色：</label>
+                    <div class="color-input">
+                        <div class="color-preview" id="steps-color-preview" style="background: #FF6B00;"></div>
+                        <input type="color" id="steps-color" value="#FF6B00">
+                        <input type="text" id="steps-color-text" value="#FF6B00" placeholder="#FF6B00">
+                    </div>
+                </div>
+            </div>
+            
+            <div id="steps-image-config" style="display: none;">
+                <div class="form-group">
+                    <label>步骤图片URL：</label>
+                    <input type="text" id="steps-image-url" placeholder="输入步骤图片链接">
+                </div>
+            </div>
+        </div>
+        
+        <!-- 主按钮设置 -->
+        <div class="config-section">
+            <h2 class="section-title">5. 主按钮设置</h2>
+            <div class="form-group">
+                <label>按钮文字：</label>
+                <input type="text" id="main-button-text" value="领红包点外卖①" placeholder="输入按钮文字">
+            </div>
+            
+            <div class="form-group">
+                <label>按钮颜色：</label>
+                <div class="color-input">
+                    <div class="color-preview" id="main-button-color-preview" style="background: #FF6B00;"></div>
+                    <input type="color" id="main-button-color" value="#FF6B00">
+                    <input type="text" id="main-button-color-text" value="linear-gradient(135deg, #FF6B00, #FF9800)" placeholder="支持颜色值或渐变">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>文字颜色：</label>
+                <div class="color-input">
+                    <div class="color-preview" id="main-button-text-color-preview" style="background: #FFFFFF;"></div>
+                    <input type="color" id="main-button-text-color" value="#FFFFFF">
+                    <input type="text" id="main-button-text-color-text" value="#FFFFFF" placeholder="#FFFFFF">
+                </div>
+            </div>
+
+            <!-- 链接类型 -->
+            <div class="form-group">
+                <label>链接类型：</label>
+                <div class="link-type-group">
+                    <label>
+                        <input type="radio" name="main-button-link-type" value="normal" checked onchange="toggleLinkType('main-button')">
+                        普通链接
+                    </label>
+                    <label>
+                        <input type="radio" name="main-button-link-type" value="miniprogram" onchange="toggleLinkType('main-button')">
+                        小程序链接 <span class="mp-tag">微信小程序</span>
+                    </label>
+                </div>
+                <div class="normal-link-config" id="main-button-normal-link">
+                    <input type="text" id="main-button-link" value="https://meituan.com" placeholder="输入点击后跳转的链接">
+                </div>
+                <div class="mp-config" id="main-button-mp-config" style="display:none;">
+                    <div style="margin-bottom: 10px;">
+                        <label>小程序链接（mp:// 格式）：</label>
+                        <input type="text" id="main-button-mp-link" placeholder="例如：mp://HqK16uHq9kFiCps" style="margin-top:5px;">
+                    </div>
+                    <div style="margin-bottom: 10px;">
+                        <label>小程序 AppID（必填，才能跳转）：</label>
+                        <input type="text" id="main-button-mp-appid" placeholder="例如：wx4a9e02f0db5a9a18（美团外卖小程序）" style="margin-top:5px;">
+                    </div>
+                    <div style="margin-bottom: 10px;">
+                        <label>小程序页面路径（可选，默认首页）：</label>
+                        <input type="text" id="main-button-mp-path" placeholder="例如：/pages/index/index" style="margin-top:5px;">
+                    </div>
+                    <div class="tips-warning" style="margin-top: 8px;">
+                        ⚠️ 需要在微信公众平台配置 JS-SDK 安全域名后才能生效。小程序 AppID 填对应小程序的 AppID（如美团外卖为 wx4a9e02f0db5a9a18）
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 副按钮设置 -->
+        <div class="config-section">
+            <h2 class="section-title">6. 副按钮设置</h2>
+            
+            <div class="toggle-group">
+                <label>启用副按钮：</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="sub-buttons-enabled" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            
+            <div id="sub-buttons-config">
+                <!-- 左侧按钮 -->
+                <div style="border: 1px solid #eee; border-radius: 6px; padding: 12px; margin-bottom: 15px;">
+                    <div style="font-weight:bold; color:#FF6B00; margin-bottom:10px;">左侧按钮</div>
+                    <div class="form-group">
+                        <label>按钮文字：</label>
+                        <input type="text" id="sub-button1-text" value="品质会场(新)" placeholder="输入按钮文字">
+                    </div>
+                    <div class="form-group">
+                        <label>描述文字：</label>
+                        <input type="text" id="sub-button1-desc" value="精选商家5折起" placeholder="输入描述文字">
+                    </div>
+                    <div class="form-group">
+                        <label>链接类型：</label>
+                        <div class="link-type-group">
+                            <label>
+                                <input type="radio" name="sub-button1-link-type" value="normal" checked onchange="toggleLinkType('sub-button1')">
+                                普通链接
+                            </label>
+                            <label>
+                                <input type="radio" name="sub-button1-link-type" value="miniprogram" onchange="toggleLinkType('sub-button1')">
+                                小程序链接 <span class="mp-tag">微信小程序</span>
+                            </label>
+                        </div>
+                        <div class="normal-link-config" id="sub-button1-normal-link">
+                            <input type="text" id="sub-button1-link" value="https://meituan.com" placeholder="输入跳转链接">
+                        </div>
+                        <div class="mp-config" id="sub-button1-mp-config" style="display:none;">
+                            <div style="margin-bottom: 10px;">
+                                <label>小程序链接（mp:// 格式）：</label>
+                                <input type="text" id="sub-button1-mp-link" placeholder="例如：mp://HqK16uHq9kFiCps" style="margin-top:5px;">
+                            </div>
+                            <div style="margin-bottom: 10px;">
+                                <label>小程序 AppID（必填）：</label>
+                                <input type="text" id="sub-button1-mp-appid" placeholder="例如：wx4a9e02f0db5a9a18" style="margin-top:5px;">
+                            </div>
+                            <div>
+                                <label>小程序页面路径（可选）：</label>
+                                <input type="text" id="sub-button1-mp-path" placeholder="/pages/index/index" style="margin-top:5px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右侧按钮 -->
+                <div style="border: 1px solid #eee; border-radius: 6px; padding: 12px;">
+                    <div style="font-weight:bold; color:#FF6B00; margin-bottom:10px;">右侧按钮</div>
+                    <div class="form-group">
+                        <label>按钮文字：</label>
+                        <input type="text" id="sub-button2-text" value="超值券包" placeholder="输入按钮文字">
+                    </div>
+                    <div class="form-group">
+                        <label>描述文字：</label>
+                        <input type="text" id="sub-button2-desc" value="多张优惠券组合" placeholder="输入描述文字">
+                    </div>
+                    <div class="form-group">
+                        <label>链接类型：</label>
+                        <div class="link-type-group">
+                            <label>
+                                <input type="radio" name="sub-button2-link-type" value="normal" checked onchange="toggleLinkType('sub-button2')">
+                                普通链接
+                            </label>
+                            <label>
+                                <input type="radio" name="sub-button2-link-type" value="miniprogram" onchange="toggleLinkType('sub-button2')">
+                                小程序链接 <span class="mp-tag">微信小程序</span>
+                            </label>
+                        </div>
+                        <div class="normal-link-config" id="sub-button2-normal-link">
+                            <input type="text" id="sub-button2-link" value="https://meituan.com" placeholder="输入跳转链接">
+                        </div>
+                        <div class="mp-config" id="sub-button2-mp-config" style="display:none;">
+                            <div style="margin-bottom: 10px;">
+                                <label>小程序链接（mp:// 格式）：</label>
+                                <input type="text" id="sub-button2-mp-link" placeholder="例如：mp://HqK16uHq9kFiCps" style="margin-top:5px;">
+                            </div>
+                            <div style="margin-bottom: 10px;">
+                                <label>小程序 AppID（必填）：</label>
+                                <input type="text" id="sub-button2-mp-appid" placeholder="例如：wx4a9e02f0db5a9a18" style="margin-top:5px;">
+                            </div>
+                            <div>
+                                <label>小程序页面路径（可选）：</label>
+                                <input type="text" id="sub-button2-mp-path" placeholder="/pages/index/index" style="margin-top:5px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 图片按钮设置 -->
+        <div class="config-section">
+            <h2 class="section-title">7. 图片按钮设置（最多3个）</h2>
+            
+            <div class="toggle-group">
+                <label>启用图片按钮：</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="image-buttons-enabled" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            
+            <div id="image-buttons-config">
+                <div class="item-list" id="image-buttons-list"></div>
+                <button class="add-btn" onclick="addImageButton()">+ 添加图片按钮</button>
+            </div>
+        </div>
+        
+        <!-- 注意事项设置 -->
+        <div class="config-section">
+            <h2 class="section-title">8. 注意事项设置</h2>
+            <div class="form-group">
+                <label>注意事项内容（每行一条）：</label>
+                <textarea id="tips-content" placeholder="每行一条注意事项">1. 先领完上方所有的券，领完后返回此页面，点击对应按钮即可使用券。
+2. 收货人手机号和登录手机号必须一致才可用券。
+3. 美团一天可领3次，饿了么可以领两个红包。
+4. 优惠券有效期以领取时显示为准。</textarea>
+            </div>
+        </div>
+        
+        <!-- 操作按钮 -->
+        <div class="actions">
+            <button class="action-btn save-btn" onclick="uploadToGitHub()">☁️ 上传到 GitHub</button>
+            <button class="action-btn export-btn" onclick="downloadConfig()">⬇️ 下载配置</button>
+            <button class="action-btn reset-btn" onclick="resetConfig()">🔄 恢复默认</button>
+            <button class="action-btn preview-btn" onclick="previewSite()">👀 预览网站</button>
+        </div>
+
+        <div id="message" class="message" style="display: none;"></div>
+        
+        <div class="preview-container" id="previewContainer">
+            <div class="preview-header">
+                <span>页面预览</span>
+                <button class="close-preview" onclick="closePreview()">关闭</button>
+            </div>
+            <iframe class="preview-frame" id="previewFrame"></iframe>
+        </div>
+    </div>
+    <script>
+    // 默认配置
+    let config = {
+        siteTitle: "美团外卖红包",
+        bgColor: "#FFD700",
+        redirectBaseUrl: "",
+        wxAppId: "wx38215d5cdbb0be8c",
+        wxSignApi: "",
+        header: {
+            enabled: true,
+            logoUrl: "",
+            text: "美团",
+            textColor: "#FF6B00",
+            fontSize: "24px",
+            fontWeight: "bold",
+            align: "center",
+            logoPosition: "left",
+            logoSize: "40px"
+        },
+        carousel: [
+            {
+                image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&auto=format&fit=crop",
+                title: "品质外卖",
+                subtitle: "精选商家5折起",
+                link: "https://meituan.com"
+            },
+            {
+                image: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=800&auto=format&fit=crop",
+                title: "超值优惠",
+                subtitle: "新人专享大礼包",
+                link: "https://meituan.com"
+            }
+        ],
+        stepsType: "text",
+        stepsText: "先领券 → 再下单 → 享优惠",
+        stepsColor: "#FF6B00",
+        stepsImage: "",
+        mainButton: {
+            text: "领红包点外卖①",
+            color: "linear-gradient(135deg, #FF6B00, #FF9800)",
+            textColor: "#FFFFFF",
+            linkType: "normal",
+            link: "https://meituan.com",
+            mpLink: "",
+            mpTitle: "",
+            mpSubtitle: "",
+            mpAppId: "",
+            mpPath: "/pages/index/index"
+        },
+        subButtonsEnabled: true,
+        subButtons: {
+            button1: {
+                text: "品质会场(新)",
+                desc: "精选商家5折起",
+                linkType: "normal",
+                link: "https://meituan.com",
+                mpLink: "",
+                mpTitle: "",
+                mpSubtitle: "",
+                mpAppId: "",
+                mpPath: "/pages/index/index"
+            },
+            button2: {
+                text: "超值券包",
+                desc: "多张优惠券组合",
+                linkType: "normal",
+                link: "https://meituan.com",
+                mpLink: "",
+                mpTitle: "",
+                mpSubtitle: "",
+                mpAppId: "",
+                mpPath: "/pages/index/index"
+            }
+        },
+        imageButtonsEnabled: true,
+        imageButtons: [
+            {
+                image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&auto=format&fit=crop",
+                text: "免费领取",
+                linkType: "normal",
+                link: "https://meituan.com",
+                mpLink: "",
+                mpTitle: "",
+                mpSubtitle: "",
+                mpAppId: "",
+                mpPath: "/pages/index/index"
+            },
+            {
+                image: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400&auto=format&fit=crop",
+                text: "免费领取",
+                linkType: "normal",
+                link: "https://meituan.com",
+                mpLink: "",
+                mpTitle: "",
+                mpSubtitle: "",
+                mpAppId: "",
+                mpPath: "/pages/index/index"
+            },
+            {
+                image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&auto=format&fit=crop",
+                text: "免费领取",
+                linkType: "normal",
+                link: "https://meituan.com",
+                mpLink: "",
+                mpTitle: "",
+                mpSubtitle: "",
+                mpAppId: "",
+                mpPath: "/pages/index/index"
+            }
+        ],
+        tips: [
+            "1. 先领完上方所有的券，领完后返回此页面，点击对应按钮即可使用券。",
+            "2. 收货人手机号和登录手机号必须一致才可用券。",
+            "3. 美团一天可领3次，饿了么可以领两个红包。",
+            "4. 优惠券有效期以领取时显示为准。"
+        ]
+    };
+
+    // ========================
+    // 页面加载初始化
+    // ========================
+    document.addEventListener('DOMContentLoaded', function() {
+        loadSavedConfig();
+        loadGitHubConfig();
+        loadFromGitHub();
+        updateFormFromConfig();
+        initColorPreviews();
+        initEventListeners();
+        initUploadZone();
+    });
+
+    // ========================
+    // 拖拽上传初始化
+    // ========================
+    function initUploadZone() {
+        const zone = document.getElementById('uploadZone');
+        zone.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            zone.classList.add('dragover');
+        });
+        zone.addEventListener('dragleave', function() {
+            zone.classList.remove('dragover');
+        });
+        zone.addEventListener('drop', function(e) {
+            e.preventDefault();
+            zone.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file && file.name.endsWith('.js')) {
+                readConfigFile(file);
+            } else {
+                showMessage('请选择 .js 文件', 'error');
+            }
+        });
+    }
+
+    // ========================
+    // 导入 config.js 文件
+    // ========================
+    function importConfigFile(input) {
+        const file = input.files[0];
+        if (!file) return;
+        readConfigFile(file);
+        input.value = '';
+    }
+
+    function readConfigFile(file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const content = e.target.result;
+                const loaded = parseConfigContent(content);
+                if (!loaded) {
+                    showMessage('未能识别 config.js 格式，请确认文件正确', 'error');
+                    return;
+                }
+                config = deepMerge(config, loaded);
+                normalizeConfig(config);
+                updateFormFromConfig();
+                const info = document.getElementById('uploadInfo');
+                info.style.display = 'block';
+                info.innerHTML = `✅ 已成功导入 <strong>${file.name}</strong>，配置已加载到表单中。`;
+                showMessage('✅ 配置文件导入成功！', 'success');
+            } catch(err) {
+                showMessage('配置解析失败：' + err.message, 'error');
+            }
+        };
+        reader.readAsText(file, 'utf-8');
+    }
+
+    // 深度合并对象
+    function deepMerge(target, source) {
+        const result = Object.assign({}, target);
+        for (const key in source) {
+            if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) {
+                result[key] = deepMerge(target[key] || {}, source[key]);
+            } else {
+                result[key] = source[key];
+            }
+        }
+        return result;
+    }
+
+    // ========================
+    // 规范化配置（关键）
+    // 把 normal + mp:// 自动转成 miniprogram
+    // ========================
+    function normalizeButton(btn) {
+        if (!btn) return;
+        btn.linkType = btn.linkType || 'normal';
+        btn.link = btn.link || '';
+        btn.mpLink = btn.mpLink || '';
+        btn.mpAppId = btn.mpAppId || '';
+        btn.mpPath = btn.mpPath || '/pages/index/index';
+
+        const maybeMp = (btn.link || '').trim();
+        if (btn.linkType === 'normal' && (maybeMp.startsWith('mp://') || maybeMp.startsWith('weixin://'))) {
+            btn.linkType = 'miniprogram';
+            btn.mpLink = maybeMp;
+            btn.link = '';
+        }
+    }
+
+    function normalizeConfig(cfg) {
+        cfg.wxAppId = cfg.wxAppId || "wx38215d5cdbb0be8c";
+        cfg.wxSignApi = cfg.wxSignApi || "";
+        if (cfg.mainButton) normalizeButton(cfg.mainButton);
+        if (cfg.subButtons?.button1) normalizeButton(cfg.subButtons.button1);
+        if (cfg.subButtons?.button2) normalizeButton(cfg.subButtons.button2);
+        if (Array.isArray(cfg.imageButtons)) {
+            cfg.imageButtons.forEach(normalizeButton);
+        }
+    }
+
+    function validateConfigForSave(cfg) {
+        const errors = [];
+
+        function checkBtn(name, btn) {
+            if (!btn) return;
+            if ((btn.linkType || 'normal') === 'miniprogram') {
+                if (!btn.mpAppId || !btn.mpAppId.trim()) {
+                    errors.push(`${name}：小程序AppID不能为空`);
+                }
+                if (!btn.mpPath || !btn.mpPath.trim()) {
+                    btn.mpPath = '/pages/index/index';
+                }
+            }
+        }
+
+        checkBtn('主按钮', cfg.mainButton);
+        checkBtn('副按钮1', cfg.subButtons?.button1);
+        checkBtn('副按钮2', cfg.subButtons?.button2);
+        (cfg.imageButtons || []).forEach((btn, i) => checkBtn(`图片按钮${i + 1}`, btn));
+
+        return { ok: errors.length === 0, errors };
+    }
+
+    // ========================
+    // 链接类型切换
+    // ========================
+    function toggleLinkType(prefix) {
+        const selected = document.querySelector(`input[name="${prefix}-link-type"]:checked`)?.value || 'normal';
+        const normalDiv = document.getElementById(`${prefix}-normal-link`);
+        const mpDiv = document.getElementById(`${prefix}-mp-config`);
+        if (normalDiv) normalDiv.style.display = selected === 'miniprogram' ? 'none' : 'block';
+        if (mpDiv) mpDiv.style.display = selected === 'miniprogram' ? 'block' : 'none';
+    }
+
+    // ========================
+    // 事件监听
+    // ========================
+    function initEventListeners() {
+        document.getElementById('header-enabled').addEventListener('change', function() {
+            document.getElementById('header-config').style.display = this.checked ? 'block' : 'none';
+        });
+        document.getElementById('steps-type').addEventListener('change', function() {
+            const isText = this.value === 'text';
+            document.getElementById('steps-text-config').style.display = isText ? 'block' : 'none';
+            document.getElementById('steps-image-config').style.display = isText ? 'none' : 'block';
+        });
+        document.getElementById('sub-buttons-enabled').addEventListener('change', function() {
+            document.getElementById('sub-buttons-config').style.display = this.checked ? 'block' : 'none';
+        });
+        document.getElementById('image-buttons-enabled').addEventListener('change', function() {
+            document.getElementById('image-buttons-config').style.display = this.checked ? 'block' : 'none';
+        });
+        initColorInputs();
+    }
+
+    // ========================
+    // 颜色输入
+    // ========================
+    function initColorInputs() {
+        bindColor('bg-color', 'bg-color-text', 'bg-color-preview');
+        bindColor('header-text-color', 'header-text-color-text', 'header-text-color-preview');
+        bindColor('steps-color', 'steps-color-text', 'steps-color-preview');
+        bindColor('main-button-color', 'main-button-color-text', 'main-button-color-preview');
+        bindColor('main-button-text-color', 'main-button-text-color-text', 'main-button-text-color-preview');
+    }
+
+    function bindColor(colorId, textId, previewId) {
+        const colorEl = document.getElementById(colorId);
+        const textEl = document.getElementById(textId);
+        const previewEl = document.getElementById(previewId);
+        if (!colorEl || !textEl || !previewEl) return;
+        colorEl.addEventListener('input', function() {
+            textEl.value = this.value;
+            previewEl.style.backgroundColor = this.value;
+        });
+        textEl.addEventListener('input', function() {
+            if (this.value.match(/^#[0-9A-Fa-f]{6}$/)) {
+                colorEl.value = this.value;
+                previewEl.style.backgroundColor = this.value;
+            }
+        });
+    }
+
+    // ========================
+    // 加载保存的配置
+    // ========================
+    function loadSavedConfig() {
+        const savedConfig = localStorage.getItem('meituanPageConfig');
+        if (savedConfig) {
+            try {
+                const parsedConfig = JSON.parse(savedConfig);
+                config = deepMerge(config, parsedConfig);
+                normalizeConfig(config);
+            } catch (e) {
+                console.error('配置解析错误', e);
+            }
+        }
+    }
+
+    function loadGitHubConfig() {
+        const fields = ['githubUsername','githubRepo','githubToken','configPath'];
+        const ids = ['github-username','github-repo','github-token','config-path'];
+        fields.forEach((f, i) => {
+            const v = localStorage.getItem(f);
+            if (v) document.getElementById(ids[i]).value = v;
+        });
+    }
+
+    function saveGitHubConfig() {
+        localStorage.setItem('githubUsername', document.getElementById('github-username').value);
+        localStorage.setItem('githubRepo', document.getElementById('github-repo').value);
+        localStorage.setItem('githubToken', document.getElementById('github-token').value);
+        localStorage.setItem('configPath', document.getElementById('config-path').value);
+    }
+
+    // ========================
+    // 测试 GitHub 连接
+    // ========================
+    async function testGitHubConnection() {
+        const username = document.getElementById('github-username').value;
+        const repo = document.getElementById('github-repo').value;
+        const token = document.getElementById('github-token').value;
+
+        if (!username || !repo || !token) {
+            showMessage('请填写完整的 GitHub 配置信息', 'error');
+            return;
+        }
+
+        const statusDiv = document.getElementById('connection-status');
+        statusDiv.innerHTML = '<span class="loading"></span> 正在测试连接...';
+
+        try {
+            const response = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/config.js`, {
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Accept': 'application/vnd.github.v3+json'
+                }
+            });
+
+            if (response.ok) {
+                statusDiv.innerHTML = '✅ 连接成功！配置文件已找到';
+                showMessage('GitHub 连接测试成功', 'success');
+                saveGitHubConfig();
+            } else if (response.status === 404) {
+                statusDiv.innerHTML = '⚠️ 仓库存在但 config.js 文件不存在，首次上传会自动创建';
+                showMessage('仓库连接成功，配置文件不存在', 'warning');
+                saveGitHubConfig();
+            } else {
+                const error = await response.json();
+                statusDiv.innerHTML = `❌ 连接失败: ${error.message}`;
+                showMessage(`连接失败: ${error.message}`, 'error');
+            }
+        } catch (error) {
+            statusDiv.innerHTML = `❌ 网络错误: ${error.message}`;
+            showMessage(`网络错误: ${error.message}`, 'error');
+        }
+    }
+
+    // ========================
+    // 从 GitHub 加载配置
+    // ========================
+    async function loadFromGitHub() {
+        const username = localStorage.getItem('githubUsername');
+        const repo = localStorage.getItem('githubRepo');
+        const token = localStorage.getItem('githubToken');
+        const configPath = localStorage.getItem('configPath') || 'config.js';
+
+        if (!username || !repo || !token) return;
+
+        try {
+            const response = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/${configPath}`, {
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Accept': 'application/vnd.github.v3+json'
+                }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                const base64 = data.content.replace(/\n/g, '');
+                const content = decodeURIComponent(escape(atob(base64)));
+                const loaded = parseConfigContent(content);
+                if (loaded) {
+                    config = deepMerge(config, loaded);
+                    normalizeConfig(config);
+                    updateFormFromConfig();
+                    showMessage('已从 GitHub 加载最新配置', 'success');
+                }
+            }
+        } catch (error) {
+            console.error('从 GitHub 加载配置失败:', error);
+        }
+    }
+
+    // 解析 config.js 内容，提取 siteConfig 对象
+    function parseConfigContent(content) {
+        try {
+            const match = content.match(/const\s+siteConfig\s*=\s*(\{[\s\S]*\})\s*;/);
+            if (match) return JSON.parse(match[1]);
+        } catch(e) {
+            console.error('解析 config.js 失败:', e);
+        }
+        return null;
+    }
+
+    // ========================
+    // 上传到 GitHub
+    // ========================
+    async function uploadToGitHub() {
+        const username = document.getElementById('github-username').value;
+        const repo = document.getElementById('github-repo').value;
+        const token = document.getElementById('github-token').value;
+        const configPath = document.getElementById('config-path').value;
+
+        if (!username || !repo || !token || !configPath) {
+            showMessage('请填写完整的 GitHub 配置信息', 'error');
+            return;
+        }
+
+        updateConfigFromForm();
+        normalizeConfig(config);
+
+        const check = validateConfigForSave(config);
+        if (!check.ok) {
+            showMessage(`保存失败：<br>${check.errors.join('<br>')}`, 'error');
+            return;
+        }
+
+        localStorage.setItem('meituanPageConfig', JSON.stringify(config));
+        saveGitHubConfig();
+
+        const configContent = generateConfigFileContent();
+        showMessage('<span class="loading"></span> 正在上传到 GitHub...', 'loading');
+
+        try {
+            let sha = '';
+            try {
+                const getRes = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/${configPath}`, {
+                    headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
+                });
+                if (getRes.ok) {
+                    const data = await getRes.json();
+                    sha = data.sha;
+                }
+            } catch(e) {}
+
+            const putResponse = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/${configPath}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Accept': 'application/vnd.github.v3+json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message: `Update config.js - ${new Date().toLocaleString()}`,
+                    content: safeBase64Encode(configContent),
+                    sha: sha || undefined
+                })
+            });
+
+            if (putResponse.ok) {
+                const rawUrl = `https://raw.githubusercontent.com/${username}/${repo}/main/${configPath}`;
+                showMessage(`✅ 配置已上传成功！<br><br>配置文件链接：<a href="${rawUrl}" target="_blank">${rawUrl}</a>`, 'success');
+            } else {
+                const error = await putResponse.json();
+                showMessage(`上传失败: ${error.message}`, 'error');
+            }
+        } catch (error) {
+            showMessage(`网络错误: ${error.message}`, 'error');
+        }
+    }
+
+    // 将字符串安全地编码为 base64（支持中文）
+    function safeBase64Encode(str) {
+        return btoa(unescape(encodeURIComponent(str)));
+    }
+
+    // 生成 config.js 文件内容
+    function generateConfigFileContent() {
+        return `// 美团外卖红包配置文件\n// 自动生成时间：${new Date().toLocaleString()}\n\nconst siteConfig = ${JSON.stringify(config, null, 2)};\n\n// 导出配置\nif (typeof module !== 'undefined' && module.exports) {\n    module.exports = siteConfig;\n}`;
+    }
+
+    // ========================
+    // 显示消息
+    // ========================
+    function showMessage(message, type = 'success') {
+        const messageDiv = document.getElementById('message');
+        messageDiv.style.display = 'block';
+        const colors = { success: '#4CAF50', error: '#f44336', warning: '#FF9800', loading: '#2196F3' };
+        messageDiv.style.backgroundColor = colors[type] || colors.success;
+        messageDiv.innerHTML = message;
+        if (type !== 'loading') {
+            setTimeout(() => { messageDiv.style.display = 'none'; }, 10000);
+        }
+    }
+
+    // ========================
+    // 更新表单从配置
+    // ========================
+    function updateFormFromConfig() {
+        config.header = config.header || {};
+        config.mainButton = config.mainButton || {};
+        config.subButtons = config.subButtons || { button1: {}, button2: {} };
+        config.subButtons.button1 = config.subButtons.button1 || {};
+        config.subButtons.button2 = config.subButtons.button2 || {};
+        config.imageButtons = Array.isArray(config.imageButtons) ? config.imageButtons : [];
+
+        normalizeConfig(config);
+
+        // 顶部栏
+        document.getElementById('header-enabled').checked = config.header.enabled !== false;
+        document.getElementById('header-config').style.display = config.header.enabled !== false ? 'block' : 'none';
+        document.getElementById('header-logo-url').value = config.header.logoUrl || '';
+        document.getElementById('header-logo-size').value = config.header.logoSize || '40px';
+        document.getElementById('header-text').value = config.header.text || '美团';
+        document.getElementById('header-text-color').value = config.header.textColor || '#FF6B00';
+        document.getElementById('header-text-color-text').value = config.header.textColor || '#FF6B00';
+        document.getElementById('header-font-size').value = config.header.fontSize || '24px';
+        document.getElementById('header-font-weight').value = config.header.fontWeight || 'bold';
+        document.getElementById('header-align').value = config.header.align || 'center';
+        document.getElementById('header-logo-position').value = config.header.logoPosition || 'left';
+
+        // 基本设置
+        document.getElementById('site-title').value = config.siteTitle || '美团外卖红包';
+        document.getElementById('bg-color').value = config.bgColor || '#FFD700';
+        document.getElementById('bg-color-text').value = config.bgColor || '#FFD700';
+        document.getElementById('redirect-base-url').value = config.redirectBaseUrl || '';
+
+        // 步骤
+        document.getElementById('steps-type').value = config.stepsType || 'text';
+        document.getElementById('steps-text').value = config.stepsText || '';
+        document.getElementById('steps-color').value = config.stepsColor || '#FF6B00';
+        document.getElementById('steps-color-text').value = config.stepsColor || '#FF6B00';
+        document.getElementById('steps-image-url').value = config.stepsImage || '';
+        const isText = (config.stepsType || 'text') === 'text';
+        document.getElementById('steps-text-config').style.display = isText ? 'block' : 'none';
+        document.getElementById('steps-image-config').style.display = isText ? 'none' : 'block';
+
+        // 主按钮
+        document.getElementById('main-button-text').value = config.mainButton.text || '';
+        document.getElementById('main-button-color').value = (config.mainButton.color || '').startsWith('#') ? config.mainButton.color : '#FF6B00';
+        document.getElementById('main-button-color-text').value = config.mainButton.color || 'linear-gradient(135deg, #FF6B00, #FF9800)';
+        document.getElementById('main-button-text-color').value = config.mainButton.textColor || '#FFFFFF';
+        document.getElementById('main-button-text-color-text').value = config.mainButton.textColor || '#FFFFFF';
+        setLinkTypeForm('main-button', config.mainButton);
+
+        // 副按钮
+        document.getElementById('sub-buttons-enabled').checked = config.subButtonsEnabled !== false;
+        document.getElementById('sub-buttons-config').style.display = config.subButtonsEnabled !== false ? 'block' : 'none';
+        document.getElementById('sub-button1-text').value = config.subButtons.button1.text || '';
+        document.getElementById('sub-button1-desc').value = config.subButtons.button1.desc || '';
+        setLinkTypeForm('sub-button1', config.subButtons.button1);
+        document.getElementById('sub-button2-text').value = config.subButtons.button2.text || '';
+        document.getElementById('sub-button2-desc').value = config.subButtons.button2.desc || '';
+        setLinkTypeForm('sub-button2', config.subButtons.button2);
+
+        // 图片按钮
+        document.getElementById('image-buttons-enabled').checked = config.imageButtonsEnabled !== false;
+        document.getElementById('image-buttons-config').style.display = config.imageButtonsEnabled !== false ? 'block' : 'none';
+
+        // 注意事项
+        document.getElementById('tips-content').value = (config.tips || []).join('\n');
+
+        renderCarouselItems();
+        renderImageButtons();
+        updateColorPreviews();
+    }
+
+    // 设置链接类型表单
+    function setLinkTypeForm(prefix, btnConfig) {
+        btnConfig = btnConfig || {};
+        const linkType = btnConfig.linkType || 'normal';
+        const radioNormal = document.querySelector(`input[name="${prefix}-link-type"][value="normal"]`);
+        const radioMp = document.querySelector(`input[name="${prefix}-link-type"][value="miniprogram"]`);
+        if (linkType === 'miniprogram') {
+            if (radioMp) radioMp.checked = true;
+        } else {
+            if (radioNormal) radioNormal.checked = true;
+        }
+        toggleLinkType(prefix);
+
+        const linkEl = document.getElementById(`${prefix}-link`);
+        const mpLinkEl = document.getElementById(`${prefix}-mp-link`);
+        const mpAppIdEl = document.getElementById(`${prefix}-mp-appid`);
+        const mpPathEl = document.getElementById(`${prefix}-mp-path`);
+        if (linkEl) linkEl.value = btnConfig.link || '';
+        if (mpLinkEl) mpLinkEl.value = btnConfig.mpLink || '';
+        if (mpAppIdEl) mpAppIdEl.value = btnConfig.mpAppId || '';
+        if (mpPathEl) mpPathEl.value = btnConfig.mpPath || '/pages/index/index';
+    }
+
+    function updateColorPreviews() {
+        document.getElementById('bg-color-preview').style.backgroundColor = config.bgColor || '#FFD700';
+        document.getElementById('header-text-color-preview').style.backgroundColor = config.header.textColor || '#FF6B00';
+        document.getElementById('steps-color-preview').style.backgroundColor = config.stepsColor || '#FF6B00';
+        document.getElementById('main-button-color-preview').style.backgroundColor =
+            (config.mainButton.color || '').startsWith('#') ? config.mainButton.color : '#FF6B00';
+        document.getElementById('main-button-text-color-preview').style.backgroundColor = config.mainButton.textColor || '#FFFFFF';
+    }
+
+    function initColorPreviews() { updateColorPreviews(); }
+
+    // ========================
+    // 渲染轮播图
+    // ========================
+    function renderCarouselItems() {
+        const container = document.getElementById('carousel-list');
+        container.innerHTML = '';
+        (config.carousel || []).forEach((item, index) => {
+            const el = document.createElement('div');
+            el.className = 'item';
+            el.innerHTML = `
+                <div class="item-header">
+                    <div class="item-title">轮播图 ${index + 1}</div>
+                    <button class="remove-btn" onclick="removeCarouselItem(${index})" ${(config.carousel || []).length <= 1 ? 'disabled' : ''}>删除</button>
+                </div>
+                <div class="form-group">
+                    <label>图片URL：</label>
+                    <input type="text" value="${item.image || ''}" placeholder="输入图片链接" onchange="updateCarouselItem(${index}, 'image', this.value)">
+                </div>
+                <div class="form-group">
+                    <label>标题：</label>
+                    <input type="text" value="${item.title || ''}" placeholder="输入标题" onchange="updateCarouselItem(${index}, 'title', this.value)">
+                </div>
+                <div class="form-group">
+                    <label>副标题：</label>
+                    <input type="text" value="${item.subtitle || ''}" placeholder="输入副标题" onchange="updateCarouselItem(${index}, 'subtitle', this.value)">
+                </div>
+                <div class="form-group">
+                    <label>跳转链接：</label>
+                    <input type="text" value="${item.link || ''}" placeholder="输入跳转链接（轮播图仅支持普通链接）" onchange="updateCarouselItem(${index}, 'link', this.value)">
+                </div>
+            `;
+            container.appendChild(el);
+        });
+    }
+
+    // ========================
+    // 渲染图片按钮（含小程序选项）
+    // ========================
+    function renderImageButtons() {
+        const container = document.getElementById('image-buttons-list');
+        container.innerHTML = '';
+        (config.imageButtons || []).forEach((item, index) => {
+            normalizeButton(item);
+            const linkType = item.linkType || 'normal';
+            const el = document.createElement('div');
+            el.className = 'item';
+            el.innerHTML = `
+                <div class="item-header">
+                    <div class="item-title">图片按钮 ${index + 1}</div>
+                    <button class="remove-btn" onclick="removeImageButton(${index})" ${(config.imageButtons || []).length <= 1 ? 'disabled' : ''}>删除</button>
+                </div>
+                <div class="form-group">
+                    <label>图片URL：</label>
+                    <input type="text" value="${item.image || ''}" placeholder="输入图片链接" onchange="updateImageButton(${index}, 'image', this.value)">
+                </div>
+                <div class="form-group">
+                    <label>按钮文字：</label>
+                    <input type="text" value="${item.text || ''}" placeholder="输入按钮文字" onchange="updateImageButton(${index}, 'text', this.value)">
+                </div>
+                <div class="form-group">
+                    <label>链接类型：</label>
+                    <div class="link-type-group">
+                        <label>
+                            <input type="radio" name="imgbtn-${index}-link-type" value="normal" ${linkType === 'normal' ? 'checked' : ''} onchange="toggleImgBtnLinkType(${index}, this.value)">
+                            普通链接
+                        </label>
+                        <label>
+                            <input type="radio" name="imgbtn-${index}-link-type" value="miniprogram" ${linkType === 'miniprogram' ? 'checked' : ''} onchange="toggleImgBtnLinkType(${index}, this.value)">
+                            小程序链接 <span class="mp-tag">微信小程序</span>
+                        </label>
+                    </div>
+                    <div id="imgbtn-${index}-normal-link" style="display:${linkType === 'normal' ? 'block' : 'none'}">
+                        <input id="imgbtn-${index}-link" type="text" value="${item.link || ''}" placeholder="输入跳转链接" onchange="updateImageButton(${index}, 'link', this.value)">
+                    </div>
+                    <div class="mp-config" id="imgbtn-${index}-mp-config" style="display:${linkType === 'miniprogram' ? 'block' : 'none'}">
+                        <div style="margin-bottom:8px;">
+                            <label>小程序链接（可选，mp:// 格式）：</label>
+                            <input id="imgbtn-${index}-mp-link" type="text" value="${item.mpLink || ''}" placeholder="例如：mp://HqK16uHq9kFiCps" style="margin-top:5px;" onchange="updateImageButton(${index}, 'mpLink', this.value)">
+                        </div>
+                        <div style="margin-bottom:8px;">
+                            <label>小程序 AppID（必填）：</label>
+                            <input id="imgbtn-${index}-mp-appid" type="text" value="${item.mpAppId || ''}" placeholder="例如：wx4a9e02f0db5a9a18" style="margin-top:5px;" onchange="updateImageButton(${index}, 'mpAppId', this.value)">
+                        </div>
+                        <div>
+                            <label>小程序页面路径（可选）：</label>
+                            <input id="imgbtn-${index}-mp-path" type="text" value="${item.mpPath || '/pages/index/index'}" placeholder="/pages/index/index" style="margin-top:5px;" onchange="updateImageButton(${index}, 'mpPath', this.value)">
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.appendChild(el);
+        });
+    }
+
+    function toggleImgBtnLinkType(index, value) {
+        document.getElementById(`imgbtn-${index}-normal-link`).style.display = value === 'normal' ? 'block' : 'none';
+        document.getElementById(`imgbtn-${index}-mp-config`).style.display = value === 'miniprogram' ? 'block' : 'none';
+        config.imageButtons[index].linkType = value;
+    }
+
+    function addCarouselItem() {
+        if (config.carousel.length >= 3) { alert('最多只能添加3张轮播图'); return; }
+        config.carousel.push({
+            image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&auto=format&fit=crop",
+            title: "新标题",
+            subtitle: "新副标题",
+            link: "https://meituan.com"
+        });
+        renderCarouselItems();
+    }
+
+    function addImageButton() {
+        if (config.imageButtons.length >= 3) { alert('最多只能添加3个图片按钮'); return; }
+        config.imageButtons.push({
+            image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&auto=format&fit=crop",
+            text: "免费领取",
+            linkType: "normal",
+            link: "https://meituan.com",
+            mpLink: "",
+            mpTitle: "",
+            mpSubtitle: "",
+            mpAppId: "",
+            mpPath: "/pages/index/index"
+        });
+        renderImageButtons();
+    }
+
+    function removeCarouselItem(index) {
+        if (config.carousel.length <= 1) { alert('至少需要保留1张轮播图'); return; }
+        if (confirm('确定要删除这张轮播图吗？')) {
+            config.carousel.splice(index, 1);
+            renderCarouselItems();
+        }
+    }
+
+    function removeImageButton(index) {
+        if (config.imageButtons.length <= 1) { alert('至少需要保留1个图片按钮'); return; }
+        if (confirm('确定要删除这个图片按钮吗？')) {
+            config.imageButtons.splice(index, 1);
+            renderImageButtons();
+        }
+    }
+
+    function updateCarouselItem(index, field, value) { config.carousel[index][field] = value; }
+    function updateImageButton(index, field, value) { config.imageButtons[index][field] = value; }
+
+    // ========================
+    // 读取链接配置
+    // ========================
+    function getLinkConfig(prefix) {
+        const linkType = document.querySelector(`input[name="${prefix}-link-type"]:checked`)?.value || 'normal';
+        const link = document.getElementById(`${prefix}-link`)?.value || '';
+        const mpLink = document.getElementById(`${prefix}-mp-link`)?.value || '';
+        const mpAppId = document.getElementById(`${prefix}-mp-appid`)?.value || '';
+        const mpPath = document.getElementById(`${prefix}-mp-path`)?.value || '/pages/index/index';
+        return { linkType, link, mpLink, mpAppId, mpPath };
+    }
+
+    // ========================
+    // 从表单更新配置
+    // ========================
+    function updateConfigFromForm() {
+        config.header = {
+            enabled: document.getElementById('header-enabled').checked,
+            logoUrl: document.getElementById('header-logo-url').value,
+            text: document.getElementById('header-text').value,
+            textColor: document.getElementById('header-text-color-text').value,
+            fontSize: document.getElementById('header-font-size').value,
+            fontWeight: document.getElementById('header-font-weight').value,
+            align: document.getElementById('header-align').value,
+            logoPosition: document.getElementById('header-logo-position').value,
+            logoSize: document.getElementById('header-logo-size').value
+        };
+        config.siteTitle = document.getElementById('site-title').value;
+        config.bgColor = document.getElementById('bg-color-text').value;
+        config.redirectBaseUrl = document.getElementById('redirect-base-url').value;
+        config.stepsType = document.getElementById('steps-type').value;
+        config.stepsText = document.getElementById('steps-text').value;
+        config.stepsColor = document.getElementById('steps-color-text').value;
+        config.stepsImage = document.getElementById('steps-image-url').value;
+
+        const mainLinkCfg = getLinkConfig('main-button');
+        config.mainButton = {
+            text: document.getElementById('main-button-text').value,
+            color: document.getElementById('main-button-color-text').value,
+            textColor: document.getElementById('main-button-text-color-text').value,
+            ...mainLinkCfg
+        };
+
+        config.subButtonsEnabled = document.getElementById('sub-buttons-enabled').checked;
+        const btn1LinkCfg = getLinkConfig('sub-button1');
+        const btn2LinkCfg = getLinkConfig('sub-button2');
+        config.subButtons = {
+            button1: {
+                text: document.getElementById('sub-button1-text').value,
+                desc: document.getElementById('sub-button1-desc').value,
+                ...btn1LinkCfg
+            },
+            button2: {
+                text: document.getElementById('sub-button2-text').value,
+                desc: document.getElementById('sub-button2-desc').value,
+                ...btn2LinkCfg
+            }
+        };
+
+        config.imageButtonsEnabled = document.getElementById('image-buttons-enabled').checked;
+
+        // 图片按钮从 DOM 完整同步（修复你原版只同步了一半的问题）
+        config.imageButtons.forEach((btn, index) => {
+            const linkType = document.querySelector(`input[name="imgbtn-${index}-link-type"]:checked`)?.value || 'normal';
+            btn.linkType = linkType;
+            btn.link = document.getElementById(`imgbtn-${index}-link`)?.value || '';
+            btn.mpLink = document.getElementById(`imgbtn-${index}-mp-link`)?.value || '';
+            btn.mpAppId = document.getElementById(`imgbtn-${index}-mp-appid`)?.value || '';
+            btn.mpPath = document.getElementById(`imgbtn-${index}-mp-path`)?.value || '/pages/index/index';
+        });
+
+        config.tips = document.getElementById('tips-content').value.split('\n').filter(l => l.trim() !== '');
+
+        normalizeConfig(config);
+    }
+
+    // ========================
+    // 下载配置文件
+    // ========================
+    function downloadConfig() {
+        updateConfigFromForm();
+
+        const check = validateConfigForSave(config);
+        if (!check.ok) {
+            showMessage(`下载失败：<br>${check.errors.join('<br>')}`, 'error');
+            return;
+        }
+
+        localStorage.setItem('meituanPageConfig', JSON.stringify(config));
+        const configContent = generateConfigFileContent();
+        const blob = new Blob([configContent], { type: 'text/javascript' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'config.js';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showMessage('✅ 配置文件已下载！', 'success');
+    }
+
+    // ========================
+    // 恢复默认配置
+    // ========================
+    function resetConfig() {
+        if (confirm('确定要恢复默认配置吗？当前修改将丢失。')) {
+            config = {
+                siteTitle: "美团外卖红包",
+                bgColor: "#FFD700",
+                redirectBaseUrl: "",
+                wxAppId: "wx38215d5cdbb0be8c",
+                wxSignApi: "",
+                header: {
+                    enabled: true,
+                    logoUrl: "",
+                    text: "美团",
+                    textColor: "#FF6B00",
+                    fontSize: "24px",
+                    fontWeight: "bold",
+                    align: "center",
+                    logoPosition: "left",
+                    logoSize: "40px"
+                },
+                carousel: [
+                    { image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&auto=format&fit=crop", title: "品质外卖", subtitle: "精选商家5折起", link: "https://meituan.com" },
+                    { image: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=800&auto=format&fit=crop", title: "超值优惠", subtitle: "新人专享大礼包", link: "https://meituan.com" }
+                ],
+                stepsType: "text",
+                stepsText: "先领券 → 再下单 → 享优惠",
+                stepsColor: "#FF6B00",
+                stepsImage: "",
+                mainButton: {
+                    text: "领红包点外卖①",
+                    color: "linear-gradient(135deg, #FF6B00, #FF9800)",
+                    textColor: "#FFFFFF",
+                    linkType: "normal",
+                    link: "https://meituan.com",
+                    mpLink: "",
+                    mpTitle: "",
+                    mpSubtitle: "",
+                    mpAppId: "",
+                    mpPath: "/pages/index/index"
+                },
+                subButtonsEnabled: true,
+                subButtons: {
+                    button1: {
+                        text: "品质会场(新)",
+                        desc: "精选商家5折起",
+                        linkType: "normal",
+                        link: "https://meituan.com",
+                        mpLink: "",
+                        mpTitle: "",
+                        mpSubtitle: "",
+                        mpAppId: "",
+                        mpPath: "/pages/index/index"
+                    },
+                    button2: {
+                        text: "超值券包",
+                        desc: "多张优惠券组合",
+                        linkType: "normal",
+                        link: "https://meituan.com",
+                        mpLink: "",
+                        mpTitle: "",
+                        mpSubtitle: "",
+                        mpAppId: "",
+                        mpPath: "/pages/index/index"
+                    }
+                },
+                imageButtonsEnabled: true,
+                imageButtons: [
+                    { image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&auto=format&fit=crop", text: "免费领取", linkType: "normal", link: "https://meituan.com", mpLink: "", mpTitle: "", mpSubtitle: "", mpAppId: "", mpPath: "/pages/index/index" },
+                    { image: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400&auto=format&fit=crop", text: "免费领取", linkType: "normal", link: "https://meituan.com", mpLink: "", mpTitle: "", mpSubtitle: "", mpAppId: "", mpPath: "/pages/index/index" },
+                    { image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&auto=format&fit=crop", text: "免费领取", linkType: "normal", link: "https://meituan.com", mpLink: "", mpTitle: "", mpSubtitle: "", mpAppId: "", mpPath: "/pages/index/index" }
+                ],
+                tips: [
+                    "1. 先领完上方所有的券，领完后返回此页面，点击对应按钮即可使用券。",
+                    "2. 收货人手机号和登录手机号必须一致才可用券。",
+                    "3. 美团一天可领3次，饿了么可以领两个红包。",
+                    "4. 优惠券有效期以领取时显示为准。"
+                ]
+            };
+            updateFormFromConfig();
+            alert('已恢复默认配置！');
+        }
+    }
+
+    // ========================
+    // 预览网站
+    // ========================
+    function previewSite() {
+        updateConfigFromForm();
+        const previewHTML = `
+            <!DOCTYPE html><html><head>
+            <title>${config.siteTitle}</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <style>
+                body { font-family: Arial; background: ${config.bgColor}; padding: 20px; }
+                .preview-container { max-width: 400px; margin: auto; }
+                .logo { display: flex; align-items: center; font-size: 24px; color: #FF6B00; font-weight: bold; margin-bottom: 20px; }
+                .main-btn { width: 100%; background: ${config.mainButton.color}; color: ${config.mainButton.textColor}; border: none; padding: 20px; font-size: 20px; border-radius: 10px; margin: 20px 0; }
+            </style></head><body>
+            <div class="preview-container">
+                <div class="logo">美团外卖红包</div>
+                <div style="background: white; border-radius: 10px; padding: 20px;">
+                    <h2 style="color:${config.stepsColor}">${config.stepsText}</h2>
+                    <button class="main-btn">${config.mainButton.text}</button>
+                    <p style="color: #666; font-size: 14px;">这是预览，实际以上传后为准。</p>
+                </div>
+            </div></body></html>
+        `;
+        const previewContainer = document.getElementById('previewContainer');
+        document.getElementById('previewFrame').srcdoc = previewHTML;
+        previewContainer.style.display = 'block';
+    }
+
+    function closePreview() {
+        document.getElementById('previewContainer').style.display = 'none';
+    }
+</script>
+
+                      
+</body>
+</html>
