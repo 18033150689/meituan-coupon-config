@@ -1,5 +1,5 @@
 // 美团外卖红包配置文件
-// 自动生成时间：2026/3/10 12:26:23
+// 自动生成时间：2026/3/10 14:07:04
 
 const siteConfig = {
   "siteTitle": "美团外卖红包",
@@ -42,14 +42,14 @@ const siteConfig = {
     "text": "天天领红包",
     "color": "135deg, #FF6B00, #FF9800",
     "textColor": "#FFFFFF",
-    "link": "http://dpurl.cn/vE8REkUz"
+    "link": "http://dpurl.cn/ilIMQoHz"
   },
   "subButtonsEnabled": true,
   "subButtons": {
     "button1": {
       "text": "吃喝玩乐 每日福利",
       "desc": "内部优惠3折起",
-      "link": "http://dpurl.cn/WsChToCz"
+      "link": "http://dpurl.cn/7hhaCk0z"
     },
     "button2": {
       "text": "开学季",
