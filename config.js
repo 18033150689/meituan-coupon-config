@@ -1,5 +1,5 @@
 // 美团外卖红包配置文件
-// 自动生成时间：2026/3/9 23:57:44
+// 自动生成时间：2026/3/10 13:28:43
 
 const siteConfig = {
   "siteTitle": "饿了么外卖红包",
@@ -56,17 +56,17 @@ const siteConfig = {
     {
       "image": "https://test.fukit.cn/autoupload/f/90B1BiV42O9JOwrrDNqX99iO_OyvX7mIgxFBfDMDErs/20260307/vSJg/750X651/%E6%B1%89%E5%A0%A1%E7%8E%8B.jpeg/webp",
       "text": "满40减6可叠加",
-      "link": "http://dpurl.cn/2IPwHM1z"
+      "link": "https://mp.weixin.qq.com/s/3s3AdkAutqnCWm565TautQ"
     },
     {
       "image": "https://test.fukit.cn/autoupload/f/90B1BiV42O9JOwrrDNqX99iO_OyvX7mIgxFBfDMDErs/20260307/jRq4/750X649/%E5%8D%8E%E8%8E%B1%E5%A3%AB.jpeg/webp",
       "text": "满25减4可叠加",
-      "link": "http://dpurl.cn/YzzSTMIz"
+      "link": "https://mp.weixin.qq.com/s/RoAO5ruOKdcqikWAab7qQg"
     },
     {
       "image": "https://test.fukit.cn/autoupload/f/90B1BiV42O9JOwrrDNqX99iO_OyvX7mIgxFBfDMDErs/20260307/kPLQ/750X648/%E6%B0%B8%E5%92%8C%E5%A4%A7%E7%8E%8B.jpeg/webp",
       "text": "满30减8可叠加",
-      "link": "http://dpurl.cn/HMGWpnKz"
+      "link": "https://mp.weixin.qq.com/s/LqELv5y_94sgEUE_wXjLWQ"
     }
   ],
   "tips": [
