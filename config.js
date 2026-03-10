@@ -1,5 +1,5 @@
 // 美团外卖红包配置文件
-// 自动生成时间：2026/3/10 13:28:43
+// 自动生成时间：2026/3/10 14:52:09
 
 const siteConfig = {
   "siteTitle": "饿了么外卖红包",
@@ -17,16 +17,10 @@ const siteConfig = {
   },
   "carousel": [
     {
-      "image": "https://test.fukit.cn/autoupload/f/90B1BiV42O9JOwrrDNqX99iO_OyvX7mIgxFBfDMDErs/20260307/6Bzm/750X650/%E5%93%88%E6%A0%B9%E8%BE%BE%E6%96%AF.jpeg/webp",
-      "title": "哈根达斯",
-      "subtitle": "满50减8可叠加！",
-      "link": "https://mp.weixin.qq.com/s/Hv918eS5p5dRwvHFF6tGuw"
-    },
-    {
-      "image": "https://test.fukit.cn/autoupload/f/90B1BiV42O9JOwrrDNqX99iO_OyvX7mIgxFBfDMDErs/20260307/xPAO/750X650/%E4%B9%90%E4%B9%90%E8%8C%B6.jpeg/webp",
-      "title": "乐乐茶",
-      "subtitle": "满30减8可叠加",
-      "link": "https://mp.weixin.qq.com/s/4W8U2asGg8umfGWJ_1O6-g"
+      "image": "https://test.fukit.cn/autoupload/f/90B1BiV42O9JOwrrDNqX99iO_OyvX7mIgxFBfDMDErs/20260310/KraU/750X671/LINLEE%E5%85%A8%E5%9B%BD%E5%93%81%E7%89%8C%E6%97%A5.jpeg/webp",
+      "title": "LINLEE全国品牌日",
+      "subtitle": "满30减6可叠加",
+      "link": "https://mp.weixin.qq.com/s/5lrcD4AjWJ-zWUAYmzOReQ"
     }
   ],
   "stepsType": "image",
@@ -54,19 +48,19 @@ const siteConfig = {
   "imageButtonsEnabled": true,
   "imageButtons": [
     {
-      "image": "https://test.fukit.cn/autoupload/f/90B1BiV42O9JOwrrDNqX99iO_OyvX7mIgxFBfDMDErs/20260307/vSJg/750X651/%E6%B1%89%E5%A0%A1%E7%8E%8B.jpeg/webp",
-      "text": "满40减6可叠加",
-      "link": "https://mp.weixin.qq.com/s/3s3AdkAutqnCWm565TautQ"
+      "image": "https://test.fukit.cn/autoupload/f/90B1BiV42O9JOwrrDNqX99iO_OyvX7mIgxFBfDMDErs/20260310/2cdw/750X650/%E7%88%86%E7%81%AB%E5%A5%BD%E5%BA%97.jpeg/webp",
+      "text": "爆火好店",
+      "link": "https://mp.weixin.qq.com/s/54eqYeSY7IInKHhldo6eSg"
     },
     {
-      "image": "https://test.fukit.cn/autoupload/f/90B1BiV42O9JOwrrDNqX99iO_OyvX7mIgxFBfDMDErs/20260307/jRq4/750X649/%E5%8D%8E%E8%8E%B1%E5%A3%AB.jpeg/webp",
-      "text": "满25减4可叠加",
-      "link": "https://mp.weixin.qq.com/s/RoAO5ruOKdcqikWAab7qQg"
+      "image": "https://test.fukit.cn/autoupload/f/90B1BiV42O9JOwrrDNqX99iO_OyvX7mIgxFBfDMDErs/20260310/2w4C/750X654/%E9%9B%B6%E5%94%AE%E4%BC%9A%E5%9C%BA.jpeg/webp",
+      "text": "零售会场",
+      "link": "https://mp.weixin.qq.com/s/f9-pJmIGxKDQev9Px-OVFA"
     },
     {
-      "image": "https://test.fukit.cn/autoupload/f/90B1BiV42O9JOwrrDNqX99iO_OyvX7mIgxFBfDMDErs/20260307/kPLQ/750X648/%E6%B0%B8%E5%92%8C%E5%A4%A7%E7%8E%8B.jpeg/webp",
-      "text": "满30减8可叠加",
-      "link": "https://mp.weixin.qq.com/s/LqELv5y_94sgEUE_wXjLWQ"
+      "image": "https://test.fukit.cn/autoupload/f/90B1BiV42O9JOwrrDNqX99iO_OyvX7mIgxFBfDMDErs/20260310/Nncv/750X654/%E7%88%86%E6%AC%BE%E7%89%B9%E4%BB%B7.jpeg/webp",
+      "text": "爆款特价",
+      "link": "https://mp.weixin.qq.com/s/54eqYeSY7IInKHhldo6eSg"
     }
   ],
   "tips": [
