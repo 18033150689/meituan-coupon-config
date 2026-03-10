@@ -1,5 +1,5 @@
 // 美团外卖红包配置文件
-// 自动生成时间：2026/3/9 23:57:44
+// 自动生成时间：2026/3/10 12:17:09
 
 const siteConfig = {
   "siteTitle": "饿了么外卖红包",
@@ -7,7 +7,7 @@ const siteConfig = {
   "header": {
     "enabled": true,
     "logoUrl": "https://test.fukit.cn/autoupload/f/90B1BiV42O9JOwrrDNqX99iO_OyvX7mIgxFBfDMDErs/20260307/6RCU/1308X1280/565df7546323c43a291c5f6edb92f35c.jpg/webp",
-    "text": "饿了么",
+    "text": "美团",
     "textColor": "#000000",
     "fontSize": "24px",
     "fontWeight": "bold",
